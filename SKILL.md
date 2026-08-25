@@ -1,326 +1,210 @@
 ---
 name: PP-food-KV-001
-description: Use when a user provides a real food photo and wants a premium Chinese restaurant Key Visual, campaign poster, hero food poster, menu hero image, or promotional KV while preserving the original food identity and using provided headline/subheadline/business information.
+description: Use when a user provides a real food photo and wants a professional restaurant key visual, campaign poster, social poster, or advertising KV built from that exact food while preserving food identity and requiring a headline, subtitle, and at least one additional business or product information field.
 ---
 
 # PP-food-KV-001
 
-## Overview
+## Core Principle
 
-把真实餐饮随手拍变成高保真、高视觉张力、可传播的餐饮 Key Visual。
+Preserve the food. Upgrade the photography. Then build the KV.
 
-**核心顺序不可颠倒：**
+Preserve the food. Understand the dish. Build one strong visual idea. Make typography part of the spatial image. Deliver a KV, not a flyer.
 
-> **先锁食物 → 再做电影级商拍 → 最后做 KV。**
+This skill converts an ordinary food photo into a high-end food Key Visual while preserving the source food as the product truth.
 
-KV 创意不能以牺牲食物 DNA 为代价。
+## Hard Gate
 
----
+Do not start KV design until all conditions are met:
 
-## 1. Entry Gate｜信息门槛
+- headline: required
+- subtitle: required
+- at least one auxiliary field: required
 
-进入正式 KV 设计前必须满足：
+Valid auxiliary fields include slogan, brand/store name, core ingredients, flavor highlight, selling point, address, phone, reservation phone, opening hours, price, cuisine type, campaign information, or other factual business information.
 
-```text
-headline = required
-subtitle = required
-auxiliary_information_count >= 1
-```
+If the gate fails, ask only for the minimum missing information. Never invent factual business data.
 
-辅助字段可以是：Slogan、店名、品牌名、核心食材、卖点、地址、电话、预订电话、营业时间、价格、菜系、活动信息等。
+## Two-Stage Mandatory Workflow
 
-如果不足，只询问**最少缺失信息**；禁止编造电话、地址、价格、营业时间、品牌历史、认证或促销活动。
+This skill is strictly two-stage.
 
-详见 `references/information-gate.md`。
+Stage 1 — Food Fidelity & Cinematic Product Photography
+1. Build a source-truth / fidelity manifest from the uploaded photo.
+2. Lock the food DNA according to PP-food-001 style constraints.
+3. First upgrade the photo into a cinematic, studio-grade commercial food photograph.
+4. Food, ingredients, vessel, plating and physical relationships must remain locked.
+5. Background may change, but the dish itself must not be redesigned.
 
----
+Stage 2 — KV Spatial Design
+1. Use the stage-1 cinematic product image as the product truth.
+2. Build the spatial concept, typography, information hierarchy and final KV design.
+3. Do not sacrifice food fidelity in exchange for stronger graphics.
 
-## 2. Stage A｜Food Fidelity First
+Never reverse the order. Do not start with aggressive KV stylization and then try to recover the food afterwards.
 
-在任何 KV 构图之前，先按 `PP-food-001` 的原则建立 Food Fidelity Manifest。
+## Source Truth and Food Fidelity
 
-硬目标：
+The uploaded food is the product being advertised, not raw material for reinterpretation.
 
-- Food Identity ≥ 95%
-- Ingredient Geometry ≥ 95%
-- Vessel / Container Identity ≥ 98%
-- Plating Fidelity ≥ 95%
-- Physical Relationship Fidelity ≥ 95%
+Preserve:
 
-必须锁定：
+- Food identity >=95%
+- Ingredient geometry >=95%
+- Vessel/container identity >=98%
+- Plating topology >=95%
+- Meaningful physical relationships >=95%
 
-- 食物类别
-- 主辅食材
-- 食材形状 / 切法 / 大小关系
-- 配料数量与空间关系
-- 汤汁 / 酱汁 / 油脂基础状态
-- 原器皿材质、颜色、形状
-- 原装盘拓扑
+KV creativity must happen mainly through background, lighting, spatial composition, typography, atmosphere, graphic structure, depth and information hierarchy.
 
-只允许显著升级：
+## Creative Workflow
 
-- 灯光
-- 背景
-- 环境
-- 景深
-- 摄影构图
-- 商业调色
-- 材质可见度
+1. Check image usability.
+2. Build source-truth / fidelity manifest.
+3. Run KV information gate.
+4. Read explicit dish name and user facts; otherwise infer dish semantics conservatively.
+5. Complete stage-1 cinematic food photography upgrade.
+6. Define ONE BIG IDEA.
+7. Select a food-domain spatial language.
+8. Define a master vanishing point.
+9. Put the food hero in the nearest visual layer.
+10. Convert the headline from flat text into a spatial visual structure.
+11. Design controlled occlusion between food, steam, props and typography.
+12. Place subtitle, slogan, selling points and utility information according to hierarchy.
+13. Unify perspective, lighting, contact shadows and depth.
+14. Generate.
+15. Run Food Fidelity QC + Typography Accuracy QC + Spatial KV QC.
+16. Retry by failure type.
 
-**Stage A 的结果应该先单独成立为“同一份食物的电影级商拍”。**
+## Visual Priority
 
-如果 Food DNA 未锁住，不得进入 Stage B。
+1. Food hero
+2. Headline
+3. Spatial concept
+4. Subtitle
+5. Slogan / selling points
+6. QR / address / phone / utility information
 
-详见 `references/food-fidelity-bridge.md`。
+Make viewers want the food before making them read the information.
 
----
+## Default KV Information Density
 
-## 3. Stage B｜KV Art Direction
+When the user does not explicitly ask for a minimal layout, the default finished KV should include:
 
-Food Fidelity PASS 后，开始 KV。
+- headline
+- subtitle
+- one slogan or campaign line
+- 3 to 4 concise selling points based on dish semantics and user facts
+- address and/or phone if provided
+- a QR function zone when the workflow or operator provides a real QR asset or QR target
 
-先确定：
+Do not make every design look identical, but do not under-fill the KV so much that it feels empty or unfinished.
 
-1. 菜名 / 菜系 / 风味语义
-2. One Big Idea
-3. Hero Food 最近景策略
-4. 主消失点
-5. Spatial Typography 类型
-6. 遮挡关系
-7. 信息密度
-8. 字体层级
-9. 语义背景
-10. QA
+## Spatial Typography Rule
 
----
+The headline is not merely placed on top of the image. It may become a food-appropriate spatial element such as:
 
-## 4. Food Remains Hero
+- restaurant signage
+- entrance lintel
+- wall structure
+- stage
+- screen / partition
+- depth corridor
+- suspended sign
+- foreground graphic plane
 
-视觉优先级：
+The headline should often have perspective, thickness, materiality and spatial presence. For Chinese food KVs, gold brush-style display lettering may be used when appropriate, but it must feel dimensional rather than flat.
 
-```text
-1. FOOD HERO
-2. HEADLINE
-3. CREATIVE SPACE
-4. SUBTITLE
-5. SLOGAN / SELLING POINTS
-6. BUSINESS INFORMATION
-```
+Typography, food, vessel, table, steam and scene must share one coherent perspective system when spatialized.
 
-默认让美食成为最近、最大、最锐利的对象。
+Do not force the headline, subtitle and slogan into the same flat horizontal line. Create spatial layering, scale contrast and directional composition when appropriate.
 
-可以让碗 / 盘适度出画，但不能重做食物本身。
+## Domain Style Firewall
 
----
+Transfer composition grammar, not another industry's visual skin.
 
-## 5. One Big Idea
+Allowed transferable methods:
 
-每张 KV 只建立一个核心视觉创意。
+- hero-product foreground emphasis
+- large-scale typography
+- one-point or diagonal perspective
+- foreground / midground / background layering
+- occlusion
+- unified lighting
+- negative space
+- spatial typography
+- strong visual hierarchy
 
-不要同时堆叠：国潮 + 赛博 + 水墨 + 杂志 + 电影 + 复古。
+Do NOT import unrelated industry skins unless explicitly requested, including:
 
-创意必须来自：
+- cyberpunk corridors
+- HUD interfaces
+- neon tech grids
+- hardware spec cards
+- sci-fi launch-event graphics
+- digital product UI motifs
+- generic tech blue
 
-- 菜品语义
-- 食材特征
-- 风味
-- 地域
-- 用户文案
-- 原照片构图机会
+Food KV must remain food-specific and dish-semantic.
 
-例：青椒酸菜鱼 → “鲜麻入席”“鲜麻风暴中心”“青椒香气穿过门头空间”。
+## Master Vanishing Point
 
----
+Before generation, establish one dominant vanishing point or coherent perspective field. Align, where applicable:
 
-## 6. Spatial Typography
+- vessel ellipse and placement
+- table plane
+- headline architecture
+- background structures
+- props
+- pricing / information plaques if used
+- steam flow and atmospheric depth
+- light direction
 
-主标题不是平贴信息，而是第二主视觉和空间构件。
+Avoid pasted-together multi-perspective compositions.
 
-允许模式：
+## Occlusion Budget
 
-- TITLE_AS_SIGNAGE
-- TITLE_AS_ARCHITECTURE
-- TITLE_AS_STAGE
-- TITLE_AS_DEPTH_FIELD
-- TITLE_AS_FOREGROUND_GRAPHIC
+Controlled occlusion creates depth.
 
-主标题可以成为餐厅门头、牌匾、门廊、墙体、舞台、纵深字场，但必须保持中文可读性。
+Allowed examples:
 
-详见 `references/spatial-typography-engine.md`。
+- steam lightly crossing headline edges
+- vessel rim grazing the lower edge of a spatial headline
+- peppercorn branch or garnish slightly entering a letter boundary
+- a headline element passing behind the food hero
+- environmental shadow touching part of the headline
 
----
+Main headline readability is absolute. As a default, keep visible occlusion of each critical Chinese character below roughly 8-12%, and never cover identity-defining strokes.
 
-## 7. Shared Vanishing Point
+## Typography Accuracy
 
-优先建立一个 `MASTER_VANISHING_POINT`。
+All user-supplied text must be exact.
 
-标题结构、桌面纹理、器皿、背景建筑、信息牌、蒸汽方向和光影尽量服从同一纵深逻辑。
+- headline accuracy = 100%
+- subtitle accuracy = 100%
+- address/phone/business-info accuracy = 100%
 
-详见 `references/vanishing-point-director.md`。
+Do not paraphrase, misspell, add random text, invent phone digits, or silently correct user wording.
 
----
+## Information Hierarchy
 
-## 8. Controlled Occlusion
+T1 Headline: 100% visual intensity
+T2 Subtitle: 35-50%
+T3 Slogan / selling point / ingredients: 15-25%
+T4 Address / phone / utility info: 8-15%
 
-通过轻微遮挡制造空间，而不是通过遮挡制造乱码。
+Do not create a heavy bottom bar by default. Use side zones, perspective-aligned micro panels, corner negative space, or subtle integrated information modules.
 
-允许：蒸汽、碗沿、筷子、青花椒枝等轻擦标题边缘。
+## Final Acceptance
 
-建议单字遮挡预算 ≤ 8–12%，且不得遮挡关键识别笔画。
+Deliver only if:
 
-详见 `references/occlusion-engine.md`。
+- stage-1 cinematic food image completed first
+- food fidelity >=95
+- semantic relevance >=85
+- typography/business-data accuracy = 100
+- spatial KV quality >=90
 
----
-
-## 9. Domain Style Firewall
-
-可以借鉴其他行业的 Campaign **构图语法**：
-
-- 巨型字体
-- 透视
-- Hero Product
-- 前中后景
-- 遮挡
-- 负空间
-- 信息层级
-
-但禁止默认继承：
-
-- HUD
-- 科技走廊
-- 赛博霓虹
-- 科技网格
-- 数码参数卡
-- 发布会视觉
-
-除非用户明确要求。
-
-**迁移构图方法，不迁移行业视觉皮肤。**
-
-详见 `references/domain-style-firewall.md`。
-
----
-
-## 10. Campaign Information Density
-
-满足信息门槛后，默认输出不是“极简两行字”。
-
-优先建立：
-
-- Headline
-- Subtitle
-- 1 条原创传播句 / Slogan（非官方声明）
-- 3–4 个卖点
-- 已有店名 / 地址 / 电话
-- QR 功能区
-- 少量装饰信息
-
-但信息层级必须清楚，不能做成密集宣传单。
-
-卖点只能来自用户信息或照片 / 菜名可合理支持的感官属性；禁止编造认证、历史、来源、每日现杀等硬事实。
-
-详见 `references/information-density.md`。
-
----
-
-## 11. Typography Accuracy
-
-以下用户提供文字必须 100% 准确：
-
-- 主标题
-- 副标题
-- 店名
-- 地址
-- 电话
-- 价格
-- 活动文字
-
-任何错字、乱码、漏字、数字错误均判 FAIL。
-
-字体视觉层级：
-
-```text
-T1 Headline          100%
-T2 Subtitle          35–50%
-T3 Slogan/Selling    15–25%
-T4 Utility Info       8–15%
-```
-
-详见 `references/typography-system.md`。
-
----
-
-## 12. QR Rule
-
-二维码必须作为**真实功能层**处理，而不是让图像模型自由绘制。
-
-优先级：
-
-1. 用户提供真实二维码 → 原样保留并叠加；
-2. 用户提供明确扫码目标且运行环境支持二维码生成 → 在图像模型外生成真实二维码，再叠加到 KV；
-3. 没有明确扫码目标 → 预留右下角或其他合适位置的 QR safe zone；
-4. 禁止把随机 AI 矩阵当正式可扫二维码交付。
-
-位置默认倾向右下角，但必须动态避开 Food Hero、地址电话和复杂纹理。
-
-详见 `references/qr-system.md`。
-
----
-
-## 13. Prompt Build
-
-最终提示词必须分层：
-
-1. Source Truth / Food Locks
-2. Commercial Re-photography
-3. Dish Semantics
-4. One Big Idea
-5. Hero Food Composition
-6. Spatial Typography
-7. Vanishing Point
-8. Occlusion
-9. Information Density
-10. Lighting / Color
-11. Text Accuracy
-12. Negative Rules
-
-详见 `references/prompt-builder.md`。
-
----
-
-## 14. Final QA
-
-必须执行三重检查：
-
-### Food Fidelity QC
-食物是否仍是原图那一份。
-
-### Typography QC
-所有关键文字是否逐字准确。
-
-### KV QC
-是否存在视觉概念、空间张力、清晰层级和餐饮语义。
-
-交付阈值：
-
-```text
-Food Fidelity >= 95
-Vessel Fidelity >= 98
-Typography Accuracy = 100
-Semantic Relevance >= 85
-KV Design Quality >= 90
-```
-
-失败按错误类型定向重试，不要随机重抽。
-
-详见 `references/kv-qc.md` 与 `references/retry-policy.md`。
-
----
-
-## Core Command
-
-> **PRESERVE THE FOOD. UPGRADE THE PHOTOGRAPHY. THEN BUILD THE KV.**
->
-> **MAKE THE HEADLINE PART OF THE SPACE, NOT A LABEL ON TOP OF THE IMAGE.**
->
-> **TRANSFER CAMPAIGN COMPOSITION GRAMMAR, NOT NON-FOOD INDUSTRY SKIN.**
+A beautiful food poster with flat typography is incomplete.
+A dramatic composition that changes the food is a failure.
+A tech-looking poster with food inserted into it is a domain-style failure.
