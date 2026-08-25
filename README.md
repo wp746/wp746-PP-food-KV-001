@@ -1,12 +1,12 @@
 # PP-food-KV-001
 
-高保真、跨品类餐饮 Key Visual 生成 Skill（V1.3.0）。
+高保真、跨品类餐饮 Key Visual 生成 Skill（V1.3.1）。
 
 ## 一句话定义
 
 **先锁住原食物，再把它拍成电影级商拍，然后识别品类，最后调用这个品类自己的 KV 视觉语言。**
 
-这版的关键升级是：**不再把所有美食都做成“中式家常菜大金字海报”。**
+这版继续坚持：**不把所有美食都做成同一套海报，也不允许为了文字张力把主产品变成背景。**
 
 ## 强制工作流
 
@@ -16,9 +16,35 @@
 4. 识别 `food_category / cuisine_family / brand_positioning / visual_mood`
 5. 调用对应品类视觉系统
 6. One Big Idea + Spatial Typography + Layout + Color + Material + Information Density
-7. Food QC + Typography QC + KV QC + Category QC
+7. Food QC + Product Dominance QC + Typography QC + KV QC + Category QC
 
-## V1.3.0：12 大品类视觉系统
+## V1.3.1 新增：Product Hero Priority
+
+这是所有美食品类通用的全局硬规则：
+
+> **产品是第一主角，标题是第二主视觉。**
+
+主标题、副标题、Slogan 可以有透视、厚度、材质、空间感和视觉张力，但不得为了突出文字而：
+- 缩小主产品；
+- 把产品推成远景；
+- 把产品当标题的背景或摆设；
+- 让空间字压住产品关键食欲区 / 包装识别区；
+- 让用户第一眼只记住标题，之后才发现产品。
+
+统一视觉优先级：
+
+```text
+1. PRODUCT / FOOD HERO
+2. HEADLINE
+3. SPATIAL CONCEPT
+4. SUBTITLE
+5. SLOGAN / SELLING POINTS
+6. BUSINESS / QR / UTILITY INFO
+```
+
+详细规则见 `references/product-hero-priority.md`。
+
+## 12 大品类视觉系统
 
 | Visual System | 适用品类 | 核心视觉语言 |
 |---|---|---|
@@ -56,6 +82,10 @@
 - 日韩：Minimal Sans / Narrow Grotesk
 - 烘焙：Warm Serif / Friendly Sans
 
+但无论哪种字体系统，都必须遵守：
+
+> **Typography builds the world around the product; it does not replace the product.**
+
 ## 信息密度也按品类变化
 
 不是所有海报都要 4 个卖点圆章：
@@ -63,7 +93,7 @@
 - 汤煲 / 面食 / BBQ：中密度
 - 高档海鲜 / 蛋糕 / 咖啡 / 西餐 / 日料：默认低到中密度
 
-## 新增文件
+## 主要参考文件
 
 - `references/category-router.md`
 - `references/category-visual-systems.md`
@@ -72,6 +102,7 @@
 - `references/layout-bias-map.md`
 - `references/brand-positioning-map.md`
 - `references/category-qc.md`
+- `references/product-hero-priority.md`
 
 ## 验收目标
 
@@ -81,6 +112,9 @@ Vessel Fidelity >= 98
 Typography Accuracy = 100
 Category Visual Language >= 85
 KV Design Quality >= 90
+Product Dominance = PASS
 ```
 
-**如果把食物替换成完全不同品类，整张 KV 仍几乎不用变，那就是模板化失败。**
+**如果把食物换成完全不同品类，整张 KV 仍几乎不用变，那就是模板化失败。**
+
+**如果去掉产品后标题仍像完整主视觉，而产品只是一个摆设，那就是 Product Hero 失败。**
