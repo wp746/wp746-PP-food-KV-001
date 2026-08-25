@@ -1,78 +1,86 @@
 # PP-food-KV-001
 
-高保真餐饮 Key Visual 生成 Skill（V1.2.0）。
+高保真、跨品类餐饮 Key Visual 生成 Skill（V1.3.0）。
 
-## 核心目标
+## 一句话定义
 
-把用户随手拍的真实美食照片，在保持食品身份、食材、器皿与摆盘高度一致的前提下，先升级为电影级商业商拍底图，再进一步完成真正具有视觉概念、空间字体、纵深关系和商业传播完成度的餐饮 KV。
+**先锁住原食物，再把它拍成电影级商拍，然后识别品类，最后调用这个品类自己的 KV 视觉语言。**
 
-它不是“食物图上加几个字”，也不是促销传单。
+这版的关键升级是：**不再把所有美食都做成“中式家常菜大金字海报”。**
 
-## 新版总原则
+## 强制工作流
 
-**先锁食物 → 先做电影级商拍 → 再做 KV。**
+1. 信息门槛：主标题 + 副标题 + N≥1
+2. Food DNA 锁定（继承 `PP-food-001` 思路）
+3. 先完成同一份食物的电影级商拍底图
+4. 识别 `food_category / cuisine_family / brand_positioning / visual_mood`
+5. 调用对应品类视觉系统
+6. One Big Idea + Spatial Typography + Layout + Color + Material + Information Density
+7. Food QC + Typography QC + KV QC + Category QC
 
-英文执行原则：
+## V1.3.0：12 大品类视觉系统
 
-**Preserve the food. Upgrade the photography. Then build the KV.**
+| Visual System | 适用品类 | 核心视觉语言 |
+|---|---|---|
+| CN_HOME_STYLE_SYSTEM | 中式家常热菜 | 烟火、锅气、门头、厚中文标题 |
+| SPICY_HOT_SYSTEM | 川湘鲜麻热辣 | 强动势、红/绿风味色、厚透视字 |
+| CLAYPOT_SOUP_SYSTEM | 砂锅、煲、汤锅 | 蒸汽、围炉、陶/铜、暖琥珀 |
+| NOODLE_RICE_NOODLE_SYSTEM | 面、米线、粉 | 上升动线、热汤、主食力量 |
+| BBQ_NIGHTMARKET_SYSTEM | 烧烤、炸物、夜市 | 炭火、夜牌、烟雾、悬挂招牌 |
+| SEAFOOD_PREMIUM_SYSTEM | 海鲜、高档中餐 | 鲜、精致、宴席、克制金属感 |
+| DESSERT_CAKE_SYSTEM | 蛋糕、甜点、西点 | 轻盈、杂志、serif、奶油/玻璃/丝带 |
+| COFFEE_TEA_SYSTEM | 咖啡、茶饮、饮品 | Lifestyle、留白、现代无衬线、玻璃窗光 |
+| WESTERN_DINING_SYSTEM | 牛排、意面、西餐 | Fine Dining、精致 serif、石材/银器 |
+| JAPANESE_KOREAN_SYSTEM | 日料、韩料 | 东亚现代、几何秩序、原木/纸/石 |
+| BAKERY_BREAKFAST_SYSTEM | 面包、早餐、烘焙 | 晨光、纸张、麦金、温暖 editorial |
+| RETAIL_PACKAGED_SYSTEM | 零食、礼盒、包装食品 | Packshot、品牌识别、货架/展台、转化信息 |
 
-## 信息门槛
+## Category Style Firewall
 
-只有满足以下条件才进入 KV 设计：
+不同品类必须真正不同，而不是只换颜色：
+- 蛋糕甜点：默认禁止中式大金字饭馆门头
+- 咖啡茶饮：默认禁止家常菜四圆章卖点模板
+- 西餐：默认禁止川湘红金大毛笔字
+- 高档海鲜：默认禁止夜市粗糙招牌
+- 家常热菜：默认禁止冷感甜品/科技视觉
+- 包装食品：包装结构和品牌文字属于产品 DNA，不得随意改写
 
-- 主标题：必填
-- 副标题：必填
-- 其他信息 N：至少 1 项
+## 字体不再只有“金色毛笔字”
 
-N 可以是：店名、Slogan、核心食材、卖点、地址、电话、营业信息、价格、菜系或其他真实商业信息。
+字体按照品类路由：
+- 家常菜 / 川湘：粗中文展示字、毛笔、招牌体
+- 高档海鲜：精致宋体 / 现代黑体 / 克制金字
+- 蛋糕甜点：Editorial Serif / Fashion Serif / Soft Display
+- 咖啡茶饮：Modern Grotesk / Clean Sans
+- 西餐：High-contrast Serif + Clean Sans
+- 日韩：Minimal Sans / Narrow Grotesk
+- 烘焙：Warm Serif / Friendly Sans
 
-## 两阶段强制工作流
+## 信息密度也按品类变化
 
-### 阶段 1：Food DNA 锁定 + 电影级商拍升级
-- 按 `PP-food-001` 的高保真规则锁定原始食物
-- 食材外观、器皿、摆盘和物理关系必须优先保真
-- 先把用户随手拍优化成电影级、工作室级、可用于广告的商拍图
-- 这一步允许升级光影、质感、背景、景深和氛围
-- 但不允许为了“更好看”而重做菜品造型
+不是所有海报都要 4 个卖点圆章：
+- 中式家常 / 川湘 / 包装食品：中高密度
+- 汤煲 / 面食 / BBQ：中密度
+- 高档海鲜 / 蛋糕 / 咖啡 / 西餐 / 日料：默认低到中密度
 
-### 阶段 2：空间化 KV 设计
-- 以阶段 1 的商拍底图为广告产品真相
-- 再去设计主标题、副标题、Slogan、卖点、二维码和商业信息
-- 再去构建空间字、纵深、门头、舞台、走廊、遮挡和透视
-- 不允许反过来先做激进 KV，再试图补救食材保真
+## 新增文件
 
-## V1.2 核心能力
+- `references/category-router.md`
+- `references/category-visual-systems.md`
+- `references/category-style-firewall.md`
+- `references/typography-personality-map.md`
+- `references/layout-bias-map.md`
+- `references/brand-positioning-map.md`
+- `references/category-qc.md`
 
-- 继承 PP-food-001 的 95%+ 高保真主体保护
-- 强制“两阶段工作流”
-- One Big Idea 创意导演
-- 菜品语义驱动视觉空间
-- Spatial Typography Engine：标题成为门头、墙体、舞台、走廊、招牌等空间结构
-- Vanishing Point Director：标题、食物、桌面、环境共享统一纵深
-- Occlusion Engine：蒸汽、碗沿、食材与标题产生克制遮挡
-- Domain Style Firewall：借用优秀 Campaign 的构图语法，但禁止把美食 KV 做成数码/科技海报
-- 默认完整 KV 信息密度：主标题 + 副标题 + Slogan + 3–4 卖点 + 地址/电话 + 二维码功能区
-- 100% 中文、地址、电话文字准确性 QC
-- Food Fidelity QC + Spatial KV QC + 定向重试
+## 验收目标
 
-## 标题系统新增规则
+```text
+Food Fidelity >= 95
+Vessel Fidelity >= 98
+Typography Accuracy = 100
+Category Visual Language >= 85
+KV Design Quality >= 90
+```
 
-- 主标题优先做成具有透视、厚度和空间存在感的结构，不应总是平贴横排
-- 金色毛笔字在适合的中式餐饮语境中，应体现体积感、材质感和受光关系，而不是一层平面金字
-- 主标题、副标题、Slogan 不应默认同一水平线平排，应根据构图建立前后层次、方向变化和视觉节奏
-- 食物仍然必须是第一主角，标题服务于 KV 张力，不得喧宾夺主
-
-## 默认信息密度
-
-在用户没有明确要求极简版式时，系统默认应尽量补足一个完成度更高的餐饮 KV：
-
-- 主标题
-- 副标题
-- 1 条传播句 / Slogan
-- 3–4 个精炼卖点
-- 地址 / 电话（若用户提供）
-- 二维码功能区（若工作流提供真实二维码资产或明确扫码目标）
-
-## 一句话原则
-
-**保留真实食物，理解这道菜，只建立一个强视觉创意，让文字成为画面空间的一部分，交付 KV，而不是宣传单。**
+**如果把食物替换成完全不同品类，整张 KV 仍几乎不用变，那就是模板化失败。**
