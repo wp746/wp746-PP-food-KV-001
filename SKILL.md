@@ -31,6 +31,26 @@ Before KV styling, lock the source food as product truth using `PP-food-001`-sty
 
 First make the exact food look like a cinematic studio-grade commercial photograph. Background, lighting and environment may change; food DNA may not.
 
+## Global Product Hero Priority
+
+This rule applies to every category and overrides typography, layout and decorative preferences.
+
+**The product must remain the first visual hero.**
+
+Headline, subtitle, slogan, badges, QR, spatial typography and environmental structures may be strong, dimensional and memorable, but they must not push the food/product into the role of background, prop, decoration or secondary object.
+
+Visual priority:
+1. PRODUCT / FOOD HERO
+2. HEADLINE
+3. SPATIAL CONCEPT
+4. SUBTITLE
+5. SLOGAN / SELLING POINTS
+6. BUSINESS / QR / UTILITY INFO
+
+Typography builds the world around the product; it does not replace the product.
+
+See `references/product-hero-priority.md`.
+
 ## Stage B｜Category Visual Language Routing
 
 Before creative direction, classify:
@@ -110,6 +130,17 @@ After routing:
 7. set category-appropriate information density
 8. unify typography, light, material, props and color
 
+## Typography Restraint Rule
+
+Headline, subtitle and slogan can have perspective, thickness, materiality and strong design tension, but must not overpower the product.
+
+Mandatory checks:
+- never shrink the product just to make room for a bigger headline;
+- never make the product a decorative background for typography;
+- never let spatial lettering cover the key appetite / package-recognition zone;
+- do not make all three text levels equally loud;
+- if the first visual memory is typography rather than product, rebalance.
+
 ## Information Density
 
 Default Campaign set when not explicitly minimal:
@@ -142,6 +173,7 @@ User-supplied text accuracy must be 100%:
 
 A final KV must pass:
 - Food Fidelity QC
+- Product Dominance QC (`references/product-hero-priority.md`)
 - Typography Accuracy QC
 - Spatial KV QC
 - Category Visual Language QC (`references/category-qc.md`)
@@ -152,5 +184,8 @@ Thresholds:
 - Typography Accuracy =100
 - Category Visual Language >=85
 - KV Design Quality >=90
+- Product Dominance = PASS
+
+Mandatory fail if typography or decorative structure demotes the product to a secondary visual role.
 
 If the category can be swapped with a completely different food and the poster still looks almost unchanged, treat it as template failure and reroute.
