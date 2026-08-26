@@ -7,9 +7,9 @@ description: Use when a user provides a real food photo and wants a professional
 
 ## Core Principle
 
-**Preserve the food → upgrade the photography → identify the food category → build a category-native KV.**
+**Preserve the food → upgrade the photography → identify the food category → build a category-native KV → push that category to its true upper-bound without demoting the product.**
 
-The skill must never turn every food into the same Chinese home-style poster.
+The skill must never turn every food into the same poster language.
 
 ## Entry Gate
 
@@ -92,13 +92,24 @@ Each category must have its own:
 
 Gold brush lettering is not a universal default. It is valid only when category + positioning + dish semantics support it.
 
-Examples:
-- home-style Chinese hot dish → warm smoke, signage/portal, bold Chinese typography
-- cake/dessert → light editorial serif, soft spatial forms, glass/cream/ribbon materiality
-- coffee/tea → modern grotesk, lifestyle negative space, glass/window typography
-- western dining → refined serif, fine-dining restraint, stone/linen/silver materiality
+## True Upper-Bound Standard｜Global
 
-See `references/typography-personality-map.md`, `references/layout-bias-map.md`, and `references/brand-positioning-map.md`.
+A category-correct poster is only the baseline. When the user asks for the strongest / upper-bound / world-class result, push that category to its **own** maximum expression rather than borrowing another category's visual skin.
+
+The upper-bound target requires all of the following simultaneously:
+- Product Hero remains first visual priority.
+- Category visual language is unmistakable.
+- Headline has category-native materiality, depth, perspective or spatial behavior.
+- Subtitle and slogan have deliberate hierarchy, rhythm and spatial separation; avoid default flat horizontal stacking.
+- One Big Idea is memorable enough to survive thumbnail viewing.
+- Foreground / midground / background have intentional depth.
+- Lighting, shadows, material response and atmosphere feel campaign-grade, not merely decorative.
+- Information density is complete but category-appropriate.
+- Food/packaging fidelity is not sacrificed for drama.
+
+**Upper-bound does not mean louder. It means more resolved, more specific, more dimensional, and more memorable.**
+
+See `references/upper-bound-standard.md`.
 
 ## Category Style Firewall
 
@@ -116,8 +127,6 @@ Allowed universal grammar:
 
 Do not directly copy category skins. Dessert must not default to Chinese gold-brush restaurant signage. Coffee must not default to four circular home-dish selling-point badges. Western dining must not default to Sichuan red-gold restaurant styling.
 
-See `references/category-style-firewall.md`.
-
 ## Creative Direction
 
 After routing:
@@ -129,6 +138,7 @@ After routing:
 6. create controlled occlusion
 7. set category-appropriate information density
 8. unify typography, light, material, props and color
+9. if upper-bound is requested, intensify depth, materiality, spatial typography and concept specificity without increasing product demotion
 
 ## Typography Restraint Rule
 
@@ -177,6 +187,7 @@ A final KV must pass:
 - Typography Accuracy QC
 - Spatial KV QC
 - Category Visual Language QC (`references/category-qc.md`)
+- Upper-Bound QC when upper-bound output is requested (`references/upper-bound-standard.md`)
 
 Thresholds:
 - Food Fidelity >=95
@@ -185,6 +196,7 @@ Thresholds:
 - Category Visual Language >=85
 - KV Design Quality >=90
 - Product Dominance = PASS
+- Upper-Bound Readiness >=90 when explicitly requested
 
 Mandatory fail if typography or decorative structure demotes the product to a secondary visual role.
 
