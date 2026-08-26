@@ -1,35 +1,43 @@
 # PP-food-KV-001
 
-高保真、跨品类餐饮 Key Visual 生成 Skill（V1.3.1）。
+高保真、跨品类餐饮 Key Visual 生成 Skill（V1.3.2）。
 
 ## 一句话定义
 
-**先锁住原食物，再把它拍成电影级商拍，然后识别品类，最后调用这个品类自己的 KV 视觉语言。**
+**先锁住原食物，再把它拍成电影级商拍，然后识别品类，调用该品类自己的视觉语言；如果要求“上限版”，就把这个品类推到它自己的上限，而不是套别的品类皮肤。**
 
-这版继续坚持：**不把所有美食都做成同一套海报，也不允许为了文字张力把主产品变成背景。**
+## V1.3.2 核心升级：True Upper-Bound Standard
 
-## 强制工作流
+V1.3.1 解决“产品必须是第一主角”；V1.3.2 在此基础上新增：**所有品类都必须拥有自己的上限版设计标准。**
 
-1. 信息门槛：主标题 + 副标题 + N≥1
-2. Food DNA 锁定（继承 `PP-food-001` 思路）
-3. 先完成同一份食物的电影级商拍底图
-4. 识别 `food_category / cuisine_family / brand_positioning / visual_mood`
-5. 调用对应品类视觉系统
-6. One Big Idea + Spatial Typography + Layout + Color + Material + Information Density
-7. Food QC + Product Dominance QC + Typography QC + KV QC + Category QC
+“上限版”不等于把字做得更大、更亮、更复杂，而是同时做到：
+- 产品依然是第一主角；
+- 品类视觉语言高度准确；
+- 主标题拥有该品类专属的厚度、材质、透视或空间行为；
+- 副标题与 Slogan 有节奏、层级和空间关系，不默认平铺横排；
+- One Big Idea 有明确记忆点；
+- 前中后景、光影、材质和环境达到 Campaign 级完成度；
+- 信息密度完整，但符合该品类；
+- 绝不为了张力牺牲 Food DNA / 包装 DNA。
 
-## V1.3.1 新增：Product Hero Priority
+一句话：**上限不是更吵，而是更完整、更具体、更有空间、更难被替换。**
 
-这是所有美食品类通用的全局硬规则：
+## 全品类上限语言
 
-> **产品是第一主角，标题是第二主视觉。**
+- 中式家常热菜：厚招牌/门头空间字 + 锅气烟火 + 近景食物压迫感，但菜永远比字更抢眼。
+- 川湘鲜麻热辣：厚透视字/红金或藤椒色空间 + 热气动势 + 强纵深，不用甜点式轻盈皮肤。
+- 砂锅煲汤：围锅舞台、半拱标题、汤汽层次、陶铜材质与暖琥珀光。
+- 面食米线粉：上升动线、蒸汽/挑面方向与标题共用纵深，强化“拉力/饱腹”视觉。
+- 烧烤炸物夜市：悬挂招牌/灯箱/棚架 + 炭火烟雾 + 夜色高反差，但不做赛博 HUD。
+- 高档海鲜宴席：克制金属/门厅/屏风式空间字 + 高级留白 + 玉白/深蓝灰/金。
+- 蛋糕甜点：奶油浮雕、玻璃/亚克力拱门、丝带/柔性装置字 + editorial 层级，产品保持最大视觉锚点。
+- 咖啡茶饮：玻璃窗字、透明/投影字、Lifestyle 空间 + 现代无衬线 + 留白，不套家常菜卖点圆章。
+- 西餐：Fine Dining 级 serif / 建筑字 / 菜单空间 + 石材、银器、亚麻，张力来自比例与材质，不来自中式大字。
+- 日韩料理：木格/纸面/招帘/几何字场 + 克制秩序 + 东亚现代留白。
+- 烘焙早餐：晨光投影、橱窗/包装纸空间字 + 麦金、奶油白、温暖 editorial。
+- 包装食品：包装本体最大、最清楚；空间标题与货架/展台/包装结构协同，品牌文字和包装结构绝不重绘。
 
-主标题、副标题、Slogan 可以有透视、厚度、材质、空间感和视觉张力，但不得为了突出文字而：
-- 缩小主产品；
-- 把产品推成远景；
-- 把产品当标题的背景或摆设；
-- 让空间字压住产品关键食欲区 / 包装识别区；
-- 让用户第一眼只记住标题，之后才发现产品。
+## Product Hero 仍然是最高优先级
 
 统一视觉优先级：
 
@@ -42,67 +50,7 @@
 6. BUSINESS / QR / UTILITY INFO
 ```
 
-详细规则见 `references/product-hero-priority.md`。
-
-## 12 大品类视觉系统
-
-| Visual System | 适用品类 | 核心视觉语言 |
-|---|---|---|
-| CN_HOME_STYLE_SYSTEM | 中式家常热菜 | 烟火、锅气、门头、厚中文标题 |
-| SPICY_HOT_SYSTEM | 川湘鲜麻热辣 | 强动势、红/绿风味色、厚透视字 |
-| CLAYPOT_SOUP_SYSTEM | 砂锅、煲、汤锅 | 蒸汽、围炉、陶/铜、暖琥珀 |
-| NOODLE_RICE_NOODLE_SYSTEM | 面、米线、粉 | 上升动线、热汤、主食力量 |
-| BBQ_NIGHTMARKET_SYSTEM | 烧烤、炸物、夜市 | 炭火、夜牌、烟雾、悬挂招牌 |
-| SEAFOOD_PREMIUM_SYSTEM | 海鲜、高档中餐 | 鲜、精致、宴席、克制金属感 |
-| DESSERT_CAKE_SYSTEM | 蛋糕、甜点、西点 | 轻盈、杂志、serif、奶油/玻璃/丝带 |
-| COFFEE_TEA_SYSTEM | 咖啡、茶饮、饮品 | Lifestyle、留白、现代无衬线、玻璃窗光 |
-| WESTERN_DINING_SYSTEM | 牛排、意面、西餐 | Fine Dining、精致 serif、石材/银器 |
-| JAPANESE_KOREAN_SYSTEM | 日料、韩料 | 东亚现代、几何秩序、原木/纸/石 |
-| BAKERY_BREAKFAST_SYSTEM | 面包、早餐、烘焙 | 晨光、纸张、麦金、温暖 editorial |
-| RETAIL_PACKAGED_SYSTEM | 零食、礼盒、包装食品 | Packshot、品牌识别、货架/展台、转化信息 |
-
-## Category Style Firewall
-
-不同品类必须真正不同，而不是只换颜色：
-- 蛋糕甜点：默认禁止中式大金字饭馆门头
-- 咖啡茶饮：默认禁止家常菜四圆章卖点模板
-- 西餐：默认禁止川湘红金大毛笔字
-- 高档海鲜：默认禁止夜市粗糙招牌
-- 家常热菜：默认禁止冷感甜品/科技视觉
-- 包装食品：包装结构和品牌文字属于产品 DNA，不得随意改写
-
-## 字体不再只有“金色毛笔字”
-
-字体按照品类路由：
-- 家常菜 / 川湘：粗中文展示字、毛笔、招牌体
-- 高档海鲜：精致宋体 / 现代黑体 / 克制金字
-- 蛋糕甜点：Editorial Serif / Fashion Serif / Soft Display
-- 咖啡茶饮：Modern Grotesk / Clean Sans
-- 西餐：High-contrast Serif + Clean Sans
-- 日韩：Minimal Sans / Narrow Grotesk
-- 烘焙：Warm Serif / Friendly Sans
-
-但无论哪种字体系统，都必须遵守：
-
-> **Typography builds the world around the product; it does not replace the product.**
-
-## 信息密度也按品类变化
-
-不是所有海报都要 4 个卖点圆章：
-- 中式家常 / 川湘 / 包装食品：中高密度
-- 汤煲 / 面食 / BBQ：中密度
-- 高档海鲜 / 蛋糕 / 咖啡 / 西餐 / 日料：默认低到中密度
-
-## 主要参考文件
-
-- `references/category-router.md`
-- `references/category-visual-systems.md`
-- `references/category-style-firewall.md`
-- `references/typography-personality-map.md`
-- `references/layout-bias-map.md`
-- `references/brand-positioning-map.md`
-- `references/category-qc.md`
-- `references/product-hero-priority.md`
+**标题可以强，但产品必须更强。**
 
 ## 验收目标
 
@@ -113,8 +61,12 @@ Typography Accuracy = 100
 Category Visual Language >= 85
 KV Design Quality >= 90
 Product Dominance = PASS
+Upper-Bound Readiness >= 90  # 当用户明确要求上限版时
 ```
 
-**如果把食物换成完全不同品类，整张 KV 仍几乎不用变，那就是模板化失败。**
-
-**如果去掉产品后标题仍像完整主视觉，而产品只是一个摆设，那就是 Product Hero 失败。**
+相关文件：
+- `references/category-visual-systems.md`
+- `references/category-qc.md`
+- `references/product-hero-priority.md`
+- `references/upper-bound-standard.md`
+- `tests/test-cases.md`
