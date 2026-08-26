@@ -80,3 +80,42 @@ FAIL：品牌大字占据大部分画面，真实商品缩小成为背景货架�
 - 产品关键食欲区/包装识别区被标题或装饰遮挡；
 - 去掉产品后海报仍然像完整主视觉，而产品存在与否影响很小；
 - 为了字体张力改变 Food DNA、器皿、包装结构。
+
+## Test 21｜默认真正上限版不能改食物本体
+输入：任意食品原图，用户未要求降级。
+PASS：默认进入 TRUE_UPPER_BOUND，但 Food DNA、器皿、摆盘、可见数量与物理关系保持；上限设计主要发生在背景、空间、字体、材质、光影和排版。
+FAIL：因为“真正上限版”重新造型、加减食材、重摆盘、改变包装/器皿或把产品变成另一道菜。
+
+## Test 22｜上一品类视觉皮肤不得污染下一品类
+输入 A：中式宽面 KV 成功使用厚金门头字、深木、圆章。
+随后输入 B：烘焙贝果新品。
+PASS：B 重新路由 BAKERY_BREAKFAST_SYSTEM，使用晨光、橱窗/包装纸/轻门店标牌、warm serif/clean sans，A 的毛笔金字/江湖门头/圆章不自动继承。
+FAIL：B 只是把宽面换成贝果，视觉皮肤几乎不变。
+
+## Test 23｜烘焙贝果专属上限版
+输入：碱水原味贝果 + 烘焙连锁品牌 + 新品上市。
+PASS：贝果原始造型、深琥珀色表皮、白色开口纹理、阵列关系保持；主标题具有 bakery-native 空间感，可用橱窗立体字/包装纸字/吊牌/晨光投影；副标题与新品信息使用从属空间介质；整体温暖、品牌级、生活方式而非餐馆江湖风。
+FAIL：重黑金毛笔门头、爆炒火焰、密集圆章、传统饭馆视觉。
+
+## Test 24｜主标题有设计但副标题平贴仍 FAIL
+输入：任意真正上限版 KV。
+PASS：Headline、Subtitle、Slogan、辅助信息形成完整空间文字系统，层级、材质、介质和视角匹配品类。
+FAIL：只有主标题做成立体字，副标题/Slogan/卖点全部像 PPT 平贴字层。
+
+## Test 25｜Typography Spatial Medium 必须属于当前品类
+PASS：每个文字空间介质都能回答“为什么属于这类食品/品牌”。
+FAIL：咖啡使用饭馆牌匾、烘焙使用川湘厚毛笔、甜点使用夜市灯箱等无语义依据的介质。
+
+## Test 26｜Previous-Skin Contamination QC
+如果当前结果沿用了上一任务的字体、门头、橱窗、圆章、丝带、灯箱、配色或道具模板，且当前品类没有独立理由支持 → `CATEGORY_SKIN_CONTAMINATION = TRUE` → FAIL。
+
+## Test 27｜真正上限版 Full Text-System Gate
+TRUE_UPPER_BOUND 必须同时满足：
+- Food Fidelity PASS
+- Product Dominance PASS
+- Category Visual Language >=90
+- Typography-Category Match >=13/15
+- Spatial Language Match >=13/15
+- Full Text-System Spatiality >=9/10
+- CATEGORY_SKIN_CONTAMINATION = FALSE
+任何一项不满足 → 不得标记 True Upper-Bound Ready。
