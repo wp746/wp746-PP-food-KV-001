@@ -1,121 +1,110 @@
 # PP-food-KV-001 Regression Tests
 
-这些测试来自真实失败模式。任何版本升级都必须避免回归。
+这些测试只保留直接影响稳定生产的真实失败模式。
 
-## Test 01｜Food DNA 必须先锁住
-输入：真实美食随手拍 + 完整信息。
-PASS：先生成同一份食物的电影级商拍；食材、器皿、摆盘高度一致。
-FAIL：为了 KV 重做食物、换器皿或加高级配料。
+## Test 01｜显式 A
+输入：用户说 A。
+PASS：只执行 Stage A 商拍。
+FAIL：因为用户同时给了产品名/店铺信息而自动进入 KV。
 
-## Test 02｜KV 不能只是“上字下菜”
-PASS：标题参与空间，Food Hero 最近景，有明确纵深。
-FAIL：顶部平贴大字 + 底部食物的宣传单结构。
+## Test 02｜显式 B 必经 A
+输入：用户说 B。
+PASS：原图 → Stage A → Stage A QC → Stage A PASS 图 → Stage B。
+FAIL：直接用原始随手拍做 KV。
 
-## Test 03｜信息门槛
-主标题 + 副标题 + 至少一个辅助字段才允许进入 KV。
+## Test 03｜默认 A
+输入：用户只上传美食图，未说 A/B，无明显商业信息。
+PASS：默认 Stage A。
 
-## Test 04｜信息真实性
-禁止编造电话、地址、认证、历史、奖项、每日现杀等硬事实。
+## Test 04｜商业信息自动 B
+输入：未说 A/B，但提供产品名、店铺、主副标题、地址、电话、价格、核心食材、卖点或新品信息。
+PASS：自动判 B，并先走完整 Stage A。
 
-## Test 05｜蛋糕甜点必须路由到 DESSERT_CAKE_SYSTEM
-PASS：轻盈 editorial serif、奶油/玻璃/丝带等柔性空间语言、低中信息密度。
-FAIL：金色毛笔字饭馆门头、油烟、深木川菜馆背景。
+## Test 05｜9:16 全局输出
+输入：横图 / 方图 / 竖图。
+PASS：KV 最终均为 9:16，产品关键区域完整。
+FAIL：为竖版拉伸、压缩或重做产品。
 
-## Test 06｜咖啡茶饮必须路由到 COFFEE_TEA_SYSTEM
-PASS：现代无衬线、Lifestyle 留白、玻璃/窗光、品牌感。
-FAIL：四宫格家常菜卖点圆章、传统饭馆门头大金字。
+## Test 06｜Stage A Food DNA Gate
+PASS：Food >=95、Vessel >=98、Plating/Physical Relationship >=95 后才能进入 Stage B。
+FAIL：Stage A 漂移但仍继续做 KV。
 
-## Test 07｜西餐必须路由到 WESTERN_DINING_SYSTEM
-PASS：Fine Dining、refined serif、石材/银器/亚麻、克制层级。
-FAIL：川湘红金、毛笔门头、火锅式热烈空间。
+## Test 07｜Current Job Isolation
+上一任务：泡菜米线；当前任务：宽面/贝果/饮品。
+PASS：当前 KV 不出现上一任务品牌、米线、泡菜、酸萝卜、Slogan 等旧事实。
+FAIL：任何旧实体污染当前任务。
 
-## Test 08｜家常热菜保持家常菜语义
-PASS：烟火、锅气、食欲、暖材质、强中文标题。
-FAIL：冷感甜品杂志、科技产品发布会。
+## Test 08｜视觉皮肤不得串台
+上一任务：中式宽面使用厚金门头字、深木、圆章。
+当前任务：烘焙贝果。
+PASS：重新路由 BAKERY_BREAKFAST_SYSTEM；上一任务皮肤不继承。
+FAIL：只换产品，字体/背景/圆章结构几乎不变。
 
-## Test 09｜包装食品必须锁定包装 DNA
-PASS：包装 Logo、文字、形状、材质和比例保持准确。
-FAIL：把包装商品改成堂食菜或重画包装文字。
+## Test 09｜蛋糕甜点
+PASS：editorial serif / elegant sans、奶油/玻璃/丝带等轻盈空间语言。
+FAIL：饭馆金色毛笔门头、油烟、深木江湖风。
 
-## Test 10｜Category Style Firewall
-不同品类可以共享透视、空间字、Hero Product 等方法，但不能共享同一字体皮肤、场景皮肤、卖点模板。
+## Test 10｜咖啡茶饮 / 水果饮品
+PASS：现代无衬线、玻璃/窗面/透明空间字、自然光、Lifestyle 留白；杯体/水果主体第一。
+FAIL：中式大金字、家常菜圆章模板、重油重火背景。
 
-## Test 11｜Category 70% + Brand Positioning 30%
-同一蛋糕：bakery_editorial 与 youthful_trendy 可有差异，但都必须仍然像甜点 KV，而不是跨品类。
+## Test 11｜烘焙早餐
+PASS：warm serif / friendly sans / subtle handwritten，晨光、橱窗、包装纸、吊牌、烘焙材质。
+FAIL：川湘毛笔金字、爆炒火焰、饭馆江湖门头。
 
-## Test 12｜低置信度保守路由
-品类识别置信度 <0.60 时，减少强地域/品类符号，使用食品广告基础系统，不硬猜。
+## Test 12｜面食粉类
+PASS：面食自己的纵向节奏、拉伸/上升动线、主食力量；产品造型仍完全锁定。
+FAIL：为了“上限”改变面条宽度、堆叠、酱料或器皿。
 
-## Test 13｜Anti-template Test
-把当前食物替换成完全不同品类后，如果字体、布局、材质、环境和信息结构几乎无需变化 → FAIL。
+## Test 13｜Product Hero
+PASS：第一眼先看到产品，再读标题。
+FAIL：标题成为第一主角、产品退到远景/角落或被空间字遮挡。
 
-## Test 14｜Typography Accuracy
-用户提供的主标题、副标题、地址、电话、价格等必须 100% 准确。
+## Test 14｜主标题空间感
+PASS：标题材质、厚度、透视和空间介质与当前品类一致。
+FAIL：只用放大、描边或统一 3D 金字冒充高级。
 
-## Test 15｜二维码真实性
-有真实二维码则锁定；无真实目标则仅预留 safe zone，不把 AI 随机矩阵当正式二维码。
+## Test 15｜副标题不能平贴
+PASS：Subtitle 明显从属主标题，并使用该品类合理的吊牌/纸带/玻璃字/菜单条/标签等空间介质。
+FAIL：主标题有设计，副标题/Slogan/卖点像 PPT 平贴字层。
 
-## Test 16｜Product Hero Priority：标题不能压过产品
-输入：任意美食品类 + 强主标题。
-PASS：主产品仍是第一视觉主角；标题有设计张力但视觉权重第二；用户第一眼先感知产品，再读取文字。
-FAIL：为了做大标题缩小产品、把产品推到远景/角落、把产品当作标题背景或摆设。
+## Test 16｜Full Text-System Spatiality
+TRUE_UPPER_BOUND 必须让 Headline / Subtitle / Slogan / Brand / Utility 形成完整层级系统，而不是多行同平面排版。
 
-## Test 17｜甜点中的标题克制
-输入：高级蛋糕 KV。
-PASS：主标题可有材质和空间感，但蛋糕仍占据关键视觉区域，奶油纹理、层次、装饰第一时间可见。
-FAIL：大片 serif / 装置字占据画面，蛋糕成为小道具。
+## Test 17｜Typography Accuracy
+用户提供的产品名、品牌、主副标题、地址、电话、价格、活动文字必须 100% 准确。
+任何错字、乱码、数字错误 → FAIL。
 
-## Test 18｜饮品中的 Product Hero
-输入：咖啡 / 奶茶 / 果茶 KV。
-PASS：杯体、液体、冰块/奶泡是视觉锚点，标题围绕产品建立生活方式场景。
-FAIL：字体、Logo、留白成为绝对主角，饮品只是桌面小摆件。
+## Test 18｜商业事实安全
+PASS：可用用户事实创作文案，但不冒充事实。
+FAIL：编造食材、口味、价格、地址、认证、品牌历史、奖项、原产地或官方背书。
 
-## Test 19｜包装商品中的品牌字不能替代商品
-PASS：包装盒/袋是第一购买锚点，品牌标题和卖点服务于包装展示。
-FAIL：品牌大字占据大部分画面，真实商品缩小成为背景货架元素。
+## Test 19｜Anti-template Test
+把当前食品替换成完全不同品类，如果字体、背景、材质、道具和信息结构几乎无需变化 → FAIL。
 
-## Test 20｜Product Hero QA 强制失败条件
-以下任意情况判 FAIL：
-- 第一眼主要看到标题而不是产品；
-- 产品关键食欲区/包装识别区被标题或装饰遮挡；
-- 去掉产品后海报仍然像完整主视觉，而产品存在与否影响很小；
-- 为了字体张力改变 Food DNA、器皿、包装结构。
+## Test 20｜TRUE_UPPER_BOUND 不改产品
+PASS：上限发生在背景、空间、字体、材质、光影、One Big Idea、Campaign Finish。
+FAIL：加减食材、换器皿、重摆盘、重做产品造型。
 
-## Test 21｜默认真正上限版不能改食物本体
-输入：任意食品原图，用户未要求降级。
-PASS：默认进入 TRUE_UPPER_BOUND，但 Food DNA、器皿、摆盘、可见数量与物理关系保持；上限设计主要发生在背景、空间、字体、材质、光影和排版。
-FAIL：因为“真正上限版”重新造型、加减食材、重摆盘、改变包装/器皿或把产品变成另一道菜。
+## Test 21｜最终硬门槛
 
-## Test 22｜上一品类视觉皮肤不得污染下一品类
-输入 A：中式宽面 KV 成功使用厚金门头字、深木、圆章。
-随后输入 B：烘焙贝果新品。
-PASS：B 重新路由 BAKERY_BREAKFAST_SYSTEM，使用晨光、橱窗/包装纸/轻门店标牌、warm serif/clean sans，A 的毛笔金字/江湖门头/圆章不自动继承。
-FAIL：B 只是把宽面换成贝果，视觉皮肤几乎不变。
+```text
+Food Fidelity >=95
+Vessel Fidelity >=98
+Typography Accuracy =100
+Category Visual Language >=90
+Typography-Category Match >=13/15
+Spatial Language Match >=13/15
+Full Text-System Spatiality >=9/10
+KV Design Quality >=90
+Product Dominance = PASS
+CATEGORY_SKIN_CONTAMINATION = FALSE
+Upper-Bound Readiness >=90
+LEGACY_ENTITY_CONTAMINATION = 0
+```
 
-## Test 23｜烘焙贝果专属上限版
-输入：碱水原味贝果 + 烘焙连锁品牌 + 新品上市。
-PASS：贝果原始造型、深琥珀色表皮、白色开口纹理、阵列关系保持；主标题具有 bakery-native 空间感，可用橱窗立体字/包装纸字/吊牌/晨光投影；副标题与新品信息使用从属空间介质；整体温暖、品牌级、生活方式而非餐馆江湖风。
-FAIL：重黑金毛笔门头、爆炒火焰、密集圆章、传统饭馆视觉。
+任意硬门槛不满足 → 不得标记 True Upper-Bound Ready。
 
-## Test 24｜主标题有设计但副标题平贴仍 FAIL
-输入：任意真正上限版 KV。
-PASS：Headline、Subtitle、Slogan、辅助信息形成完整空间文字系统，层级、材质、介质和视角匹配品类。
-FAIL：只有主标题做成立体字，副标题/Slogan/卖点全部像 PPT 平贴字层。
-
-## Test 25｜Typography Spatial Medium 必须属于当前品类
-PASS：每个文字空间介质都能回答“为什么属于这类食品/品牌”。
-FAIL：咖啡使用饭馆牌匾、烘焙使用川湘厚毛笔、甜点使用夜市灯箱等无语义依据的介质。
-
-## Test 26｜Previous-Skin Contamination QC
-如果当前结果沿用了上一任务的字体、门头、橱窗、圆章、丝带、灯箱、配色或道具模板，且当前品类没有独立理由支持 → `CATEGORY_SKIN_CONTAMINATION = TRUE` → FAIL。
-
-## Test 27｜真正上限版 Full Text-System Gate
-TRUE_UPPER_BOUND 必须同时满足：
-- Food Fidelity PASS
-- Product Dominance PASS
-- Category Visual Language >=90
-- Typography-Category Match >=13/15
-- Spatial Language Match >=13/15
-- Full Text-System Spatiality >=9/10
-- CATEGORY_SKIN_CONTAMINATION = FALSE
-任何一项不满足 → 不得标记 True Upper-Bound Ready。
+## Test 22｜Targeted Retry
+PASS：Food Drift 回 Stage A；标题平 → Spatial Typography Retry；品类串台 → Category Router Retry；旧皮肤污染 → 重建当前品类系统；文字错误 → Typography Accuracy Retry。
+FAIL：随机整张重抽导致已经正确的产品或文字再次漂移。
