@@ -44,10 +44,7 @@ Stage A 漂移 → 返回 Stage A 修正。禁止用 KV 排版掩盖产品漂移
 
 每个新任务创建独立 `CURRENT_JOB_FACTS`。
 
-当前任务只允许使用：
-- 当前用户图的可见事实；
-- 当前用户明确提供的信息；
-- 当前任务已验证的 Stage A / Stage B 中间产物。
+当前任务只允许使用：当前用户图的可见事实、当前用户明确提供的信息、当前任务已验证的 Stage A / Stage B 中间产物。
 
 除非用户明确要求沿用：
 
@@ -69,7 +66,7 @@ LEGACY_CATEGORY_SKIN_IMPORT = OFF
 
 规则：
 - 用户给产品名但没给主标题 → 产品名可直接作为 headline；
-- 用户没给 subtitle → 可生成**不冒充硬事实**的传播型副标题；
+- 用户没给 subtitle → 可生成不冒充硬事实的传播型副标题；
 - 用户给“新品/纯手制/可预定”等事实时才允许正式写入；
 - 信息不足时降低信息密度，不用编造内容填满版面；
 - 用户说“剩下的你自己安排”只授权视觉导演和安全传播文案，不授权发明商业事实。
@@ -105,26 +102,9 @@ Brand Positioning 30%
 
 ## P5. Method, Never Previous Skin
 
-允许跨品类迁移：
-- Hero Product；
-- 透视方法；
-- 空间字体方法；
-- 前中后景；
-- 受控遮挡；
-- 统一光影；
-- 信息层级；
-- 负空间；
-- One Big Idea。
+允许跨品类迁移：Hero Product、透视方法、空间字体方法、前中后景、受控遮挡、统一光影、信息层级、负空间、One Big Idea。
 
-禁止自动继承上一任务：
-- 字体人格；
-- 标题材质；
-- 空间介质；
-- 门头/牌匾/橱窗/丝带/灯箱/圆章/拱门；
-- 配色；
-- 道具；
-- 卖点模块；
-- 背景皮肤。
+禁止自动继承上一任务：字体人格、标题材质、空间介质、门头/牌匾/橱窗/丝带/灯箱/圆章/拱门、配色、道具、卖点模块、背景皮肤。
 
 如果只换产品海报仍几乎成立：
 
@@ -134,8 +114,6 @@ RESULT = FAIL
 ```
 
 ## P6. Product Hero Priority
-
-统一优先级：
 
 ```text
 1. PRODUCT / FOOD HERO
@@ -164,14 +142,7 @@ locked product truth
 × campaign finish
 ```
 
-真正上限发生在：
-- category-native background；
-- typography personality / materiality；
-- headline/subtitle spatial medium；
-- full text-system depth；
-- perspective / lighting / material integration；
-- One Big Idea；
-- Campaign Finish。
+真正上限发生在：category-native background、typography personality/materiality、headline/subtitle spatial medium、full text-system depth、perspective/lighting/material integration、One Big Idea、Campaign Finish。
 
 真正上限**不发生在**：重做食物、加减食材、换器皿、重摆盘、重画包装。
 
@@ -240,7 +211,36 @@ Weak Big Idea → Upper-Bound Creative Retry
 
 最多 3 次定向重试。Food/文字硬门槛始终无法可靠满足 → 不假装 PASS。
 
-## P12. Fail Closed
+## P12. Capability Evidence + Runtime Profile
+
+静态能力与真实验证必须分开：
+
+```text
+RUNTIME_CAPABILITIES_DECLARED = PASS / BLOCKED
+RUNTIME_CAPABILITIES_VERIFIED = PASS / PENDING / BLOCKED
+FIRST_LIVE_VERIFICATION_REQUIRED = TRUE / FALSE
+```
+
+工具 schema、宿主说明、连接存在只能证明 `DECLARED = PASS`。
+
+完整双 Skill `VERIFIED = PASS` 必须有真实 A→B 端到端证据，或者存在与当前非秘密配置 fingerprint 匹配、scope = `FULL_A_TO_B` 的 verified Runtime Profile。
+
+如果没有匹配 profile：
+
+```text
+RUNTIME_CAPABILITIES_VERIFIED = PENDING
+FIRST_LIVE_VERIFICATION_REQUIRED = TRUE
+```
+
+允许 READY，但禁止声称“完整 A→B 已 smoke tested”。第一笔真实 B 任务兼任验证，不额外生成测试海报。
+
+若首次任务只有 A，只能建立 `STAGE_A` scope evidence；不能把完整 B 链路标成 verified。
+
+Verified profile 保存在宿主私有持久状态；fingerprint 不变时跨会话复用。Fingerprint 不得包含 API Key、Token、完整私有 URL 或用户凭据。
+
+配置 identity 变化或任何真实链路失败 → profile 失效。
+
+## P13. Fail Closed
 
 以下任一无法确认：
 
@@ -250,6 +250,7 @@ PRODUCTION_GATE = BLOCKED
 
 - Mandatory Read；
 - Pre-flight；
+- `RUNTIME_CAPABILITIES_DECLARED != PASS`；
 - Stage A dependency；
 - 当前 Stage A PASS reference；
 - VISION_MODEL / IMAGE_MODEL / Credential / 图片传递；
@@ -258,13 +259,13 @@ PRODUCTION_GATE = BLOCKED
 - 当前 B Execution Contract；
 - 未解决规则冲突。
 
-禁止“先出一张试试看”。
+`RUNTIME_CAPABILITIES_VERIFIED = PENDING` 本身不代表配置缺失；它表示第一笔真实业务必须在最终交付前完成 live verification。
 
-## P13. Repository Security Boundary
+## P14. Repository Security Boundary
 
-仓库不保存具体供应商名、私有聚合平台名、实际 API Base URL、API Key、Token 或私有模型凭据。只保留通用能力要求；真实值由宿主 Secret / Environment / Connection 提供。
+仓库不保存具体供应商名、私有聚合平台名、实际 API Base URL、API Key、Token、私有模型凭据或 Runtime Profile 的真实值。只保留通用能力要求；真实值由宿主 Secret / Environment / Connection / 私有持久状态提供。
 
-## P14. Runtime State
+## P15. Runtime State
 
 ```text
 SETUP_GATE
@@ -273,4 +274,12 @@ SETUP_GATE
 → PRODUCTION
 ```
 
-连接失效、版本变化或上下文压缩后无法证明 P0 规则时，重新 Bootstrap / Pre-flight。
+READY 时必须准确报告：
+
+```text
+RUNTIME_CAPABILITIES_DECLARED = PASS
+RUNTIME_CAPABILITIES_VERIFIED = PASS / PENDING
+FIRST_LIVE_VERIFICATION_REQUIRED = TRUE / FALSE
+```
+
+连接失效、fingerprint 不匹配、版本变化或上下文压缩后无法证明 P0 规则时，重新 Bootstrap / Pre-flight。
