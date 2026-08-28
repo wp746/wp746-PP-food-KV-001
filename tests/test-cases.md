@@ -1,6 +1,6 @@
 # PP-food-KV-001 Regression Tests
 
-这些测试只保留直接影响稳定生产的真实失败模式。
+这些测试只保留直接影响稳定生产的失败模式，并避免把历史真实项目词或某几个品类皮肤反复注入冷启动上下文。
 
 ## Test 01｜显式 A
 输入：用户说 A。
@@ -34,9 +34,9 @@ PASS：Stage B reference 只使用当前任务 `STAGE_A_PASS_IMAGE`。
 FAIL：回退原图、引用上一任务图片或用文字描述代替实际参考图。
 
 ## Test 08｜Current Job Isolation
-上一任务：泡菜米线；当前任务：宽面/贝果/饮品。
-PASS：当前 KV 不出现上一任务品牌、米线、泡菜、酸萝卜、Slogan 等旧事实。
-FAIL：任何旧实体污染当前任务。
+上一任务含 `LEGACY_PRODUCT_X / LEGACY_BRAND_X / LEGACY_COPY_X`；当前任务为 `CURRENT_PRODUCT_Y`。
+PASS：当前 KV 不出现任何 legacy entity。
+FAIL：上一任务事实、文案或品牌混入当前任务。
 
 ## Test 09｜B Execution Contract
 PASS：Stage B 生成前合同至少包含：
@@ -57,63 +57,50 @@ FORBIDDEN
 
 FAIL：未建立合同就直接让 IMAGE_MODEL 自由解释仓库。
 
-## Test 10｜视觉皮肤不得串台
-上一任务：中式宽面使用厚金门头字、深木、圆章。
-当前任务：烘焙贝果。
-PASS：重新路由 BAKERY_BREAKFAST_SYSTEM；上一任务皮肤不继承。
-FAIL：只换产品，字体/背景/圆章结构几乎不变。
+## Test 10｜每个新任务重新 Category Route
+输入：连续两个明显不同的食品品类 A → B。
+PASS：B 重新确定字体人格、空间介质、背景、材质、配色、道具和信息密度。
+FAIL：B 只换产品，仍继承 A 的具体视觉皮肤。
 
-## Test 11｜蛋糕甜点
-PASS：editorial serif / elegant sans、奶油/玻璃/丝带等轻盈空间语言。
-FAIL：饭馆金色毛笔门头、油烟、深木江湖风。
+## Test 11｜Method vs Skin
+PASS：可迁移 Hero Product、透视、空间字体方法、层级、负空间、One Big Idea。
+FAIL：直接迁移上一任务字体、门头/橱窗/灯箱/丝带/圆章、配色、道具或背景模板。
 
-## Test 12｜咖啡茶饮 / 水果饮品
-PASS：现代无衬线、玻璃/窗面/透明空间字、自然光、Lifestyle 留白；杯体/水果主体第一。
-FAIL：中式大金字、家常菜圆章模板、重油重火背景。
-
-## Test 13｜烘焙早餐
-PASS：warm serif / friendly sans / subtle handwritten，晨光、橱窗、包装纸、吊牌、烘焙材质。
-FAIL：川湘毛笔金字、爆炒火焰、饭馆江湖门头。
-
-## Test 14｜面食粉类
-PASS：品类自己的纵向节奏、拉伸/上升动线、主食力量；产品造型仍完全锁定。
-FAIL：为了“上限”改变面条宽度、堆叠、酱料或器皿。
-
-## Test 15｜Product Hero
+## Test 12｜Product Hero
 PASS：第一眼先看到产品，再读标题。
 FAIL：标题成为第一主角、产品退到远景/角落或被空间字遮挡。
 
-## Test 16｜主标题空间感
-PASS：标题材质、厚度、透视和空间介质与当前品类一致。
-FAIL：只用放大、描边或统一 3D 金字冒充高级。
+## Test 13｜Headline Category Match
+PASS：主标题的字体人格、材质、厚度、透视和空间介质能解释“为什么属于当前品类/品牌”。
+FAIL：只靠放大、描边或通用 3D 效果冒充高级。
 
-## Test 17｜副标题不能平贴
-PASS：Subtitle 明显从属主标题，并使用该品类合理的吊牌/纸带/玻璃字/菜单条/标签等空间介质。
-FAIL：主标题有设计，副标题/Slogan/卖点像 PPT 平贴字层。
+## Test 14｜Subtitle / Auxiliary Spatiality
+PASS：Subtitle 明显从属主标题，Slogan/卖点/品牌/Utility 继续降级但仍属于同一品类空间语法。
+FAIL：只有主标题有设计，其余文字像 PPT 平贴字层。
 
-## Test 18｜Full Text-System Spatiality
-TRUE_UPPER_BOUND 必须让 Headline / Subtitle / Slogan / Brand / Utility 形成完整层级系统，而不是多行同平面排版。
+## Test 15｜Full Text-System Spatiality
+TRUE_UPPER_BOUND 必须让 Headline / Subtitle / Slogan / Brand / Utility 形成完整层级与统一空间逻辑。
 
-## Test 19｜Typography Accuracy
+## Test 16｜Typography Accuracy
 用户提供的产品名、品牌、主副标题、地址、电话、价格、活动文字必须 100% 准确。
 任何错字、乱码、数字错误 → FAIL。
 
-## Test 20｜商业事实安全
-PASS：可用用户事实创作传播文案，但不冒充硬事实。
-FAIL：编造食材、口味、价格、地址、认证、品牌历史、奖项、原产地、制作工艺或官方背书。
+## Test 17｜商业事实安全
+PASS：产品名可作为 headline；缺 subtitle 时可用非硬事实传播文案；信息少时降低密度。
+FAIL：为了填版面编造食材、口味、价格、地址、电话、认证、品牌历史、奖项、原产地、制作工艺或官方背书。
 
-## Test 21｜Anti-template Test
+## Test 18｜Anti-template Test
 把当前食品替换成完全不同品类，如果字体、背景、材质、道具和信息结构几乎无需变化 → FAIL。
 
-## Test 22｜TRUE_UPPER_BOUND 不改产品
+## Test 19｜TRUE_UPPER_BOUND 不改产品
 PASS：上限发生在背景、空间、字体、材质、光影、One Big Idea、Campaign Finish。
-FAIL：加减食材、换器皿、重摆盘、重做产品造型。
+FAIL：加减食材、换器皿、重摆盘、重做产品造型或包装。
 
-## Test 23｜保真与上限冲突
+## Test 20｜保真与上限冲突
 PASS：降低标题/背景/空间激进度，保留 Food DNA。
 FAIL：为了上限设计牺牲产品真相。
 
-## Test 24｜最终硬门槛
+## Test 21｜最终硬门槛
 
 ```text
 Food Fidelity >=95
@@ -132,9 +119,9 @@ LEGACY_ENTITY_CONTAMINATION = 0
 
 任意硬门槛不满足 → 不得标记 True Upper-Bound Ready。
 
-## Test 25｜Targeted Retry
-PASS：Food Drift 回 Stage A；Product Demotion → Product Hero Retry；标题平 → Spatial Typography Retry；品类串台 → Category Router Retry；旧皮肤污染 → 重建当前品类系统；文字错误 → Typography Accuracy Retry。
+## Test 22｜Targeted Retry
+PASS：Food Drift 回 Stage A；Product Demotion → Product Hero Retry；标题系统平 → Spatial Typography Retry；品类串台 → Category Router Retry；旧皮肤污染 → 重建当前品类系统；文字错误 → Typography Accuracy Retry。
 FAIL：随机整张重抽导致已经正确的产品或文字再次漂移。
 
-## Test 26｜Fail Closed
-Mandatory Read、Pre-flight、Stage A PASS reference 或当前 B Contract 任一无法确认 → 不得调用 Stage B IMAGE_MODEL。
+## Test 23｜Fail Closed
+Mandatory Read、Pre-flight、Stage A PASS reference、Category Route、Copy Lists 或当前 B Contract 任一无法确认 → 不得调用 Stage B IMAGE_MODEL。
