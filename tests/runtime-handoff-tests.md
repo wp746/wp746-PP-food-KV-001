@@ -1,77 +1,68 @@
 # PP-food-KV-001 Runtime / Handoff Regression Tests
 
-## Test R01｜首次加载进入 SETUP_GATE
+这些测试定义 Stage B 跨智能体冷启动的硬行为。
 
-条件：新智能体首次安装或运行状态未知。
+## R01｜冷启动必须从 BOOTSTRAP 开始
+PASS：优先读取 `BOOTSTRAP.md`，按 Mandatory Read Order 完成加载。
+FAIL：只读 `SKILL.md` 摘要或只读少数 references 后直接出 KV。
 
-PASS：先读取 `HANDOFF.md`，确认 VISION_MODEL、IMAGE_MODEL、API_BASE_URL、Credential、参考图编辑能力和 Stage A→Stage B 图片传递能力。
+## R02｜必读集不得选择性跳过
+PASS：`REQUIRED_READ_SET.md` 中 ALWAYS_LOAD 全部读取，并完成读取证明。
+FAIL：因为“当前是烘焙/饮品”就跳过 food-fidelity-bridge、product-hero、category-style-firewall、typography、upper-bound、retry、QC 或 tests。
 
-FAIL：安装后直接进入 KV 生成。
+## R03｜读取证明必须复述硬规则
+Pre-flight 必须准确返回：
+- 当前 VERSION；
+- 默认 9:16；
+- A/B 路由；
+- B 必经 A；
+- Stage B reference = 当前任务 Stage A PASS 图；
+- Product > Headline；
+- TRUE_UPPER_BOUND 的正确定义；
+- Previous-Skin Contamination 判废；
+- Full Text-System Spatiality；
+- Typography Accuracy = 100%。
 
-## Test R02｜PP-food-001 依赖检查
+## R04｜Mandatory Read 未完成则 Fail Closed
+任一必读文件不可访问、未验证或只被摘要代替 → `PRODUCTION_GATE = BLOCKED`。
 
-PASS：优先检测/加载 `PP-food-001`；缺失时提醒安装或明确进入降级模式。
+## R05｜运行能力未确认则 Fail Closed
+READY 前必须确认：VISION_MODEL、reference-image IMAGE_MODEL、Credential、Stage A→Stage B 图片传递、视觉读取生成结果。任一 UNKNOWN/MISSING → BLOCKED。
 
-FAIL：一边声称执行双 Skill，一边实际上没有 Stage A。
+## R06｜PP-food-001 依赖必须真实存在
+PASS：B 路径能够真正执行 Stage A。
+FAIL：声称“双 Skill”但没有 Stage A 或 Stage A 结果不能传入 Stage B。
 
-## Test R03｜默认文本模型禁止猜图
+## R07｜不允许猜图
+宿主默认模型无视觉能力时，原图、Stage A 图和 Stage B 图均由 VISION_MODEL 读取/QC。
 
-PASS：宿主默认模型无视觉时，上传图必须交给 VISION_MODEL。
+## R08｜仓库不得保存私有运行配置
+FAIL：出现具体供应商名、私有聚合平台名、实际 API Base URL、API Key 或私有模型凭据。
 
-FAIL：通过文件名、用户描述或常识推测图片构图并直接路由。
+## R09｜READY 后等待“启动”
+配置与 Pre-flight 通过后输出：
 
-## Test R04｜双模型角色不混淆
+```text
+READY
+RUNTIME_STATE = READY_WAITING_FOR_START
+```
 
-PASS：VISION_MODEL 负责识图/路由/QC；IMAGE_MODEL 负责参考图编辑与最终出图。
+等待用户“启动”。
 
-FAIL：把“IMAGE_MODEL 能看参考图”理解成不需要前置路由和后置 QC。
+## R10｜启动后自然语言生产
+进入 PRODUCTION 后用户只需上传图、说 A/B 或提供商业信息；不得要求用户理解内部 JSON、Visual System 或 Prompt。
 
-## Test R05｜Stage A 输出必须传给 Stage B
+## R11｜每个 B 任务必须建立 Execution Contract
+合同至少包含：CURRENT_JOB_FACTS、Stage A PASS reference、Category Route、Copy Allowlist、Copy Blocklist、Product Priority、TRUE_UPPER_BOUND、Forbidden。
 
-PASS：Stage B IMAGE_MODEL 输入参考图是 Stage A 商拍结果。
+## R12｜Stage A 输出必须传给 Stage B
+FAIL：Stage B 回退到原始随手拍或上一任务图片。
 
-FAIL：Stage B 重新用原始随手拍，导致 Food DNA 和商业质感不稳定。
+## R13｜每个新任务必须重新路由品类
+FAIL：因为上一张效果好，直接继承上一品类字体、背景、材质、圆章、门头、橱窗、配色或道具皮肤。
 
-## Test R06｜配置完成后等待“启动”
+## R14｜上下文压缩/恢复必须重新引导
+如果智能体无法证明当前 `RUNTIME_MANIFEST.md` 与 P0 规则仍在活跃上下文，应重新 BOOTSTRAP / Pre-flight。
 
-PASS：状态为 `READY_WAITING_FOR_START`，明确提示用户回复“启动”。
-
-FAIL：未收到“启动”就自动生产。
-
-## Test R07｜“启动”后进入自然语言生产
-
-PASS：用户说“启动”后切换 `PRODUCTION`，用户可用大白话上传照片和信息。
-
-FAIL：要求用户提供内部 JSON、Visual System 名称或 Prompt。
-
-## Test R08｜KV 信息门槛
-
-PASS：headline + subtitle + N≥1 才进入 Stage B；缺失时只追问最少项。
-
-FAIL：信息不足时编造店名、地址、电话、价格或 Slogan 事实。
-
-## Test R09｜Stage A Prompt Hard Lock
-
-PASS：明确锁定食物、主要食材几何、器皿/包装、摆盘与物理关系。
-
-FAIL：只写“保持原图风格”。
-
-## Test R10｜Stage B Product Hero Lock
-
-PASS：明确要求产品第一视觉主角，标题可有厚度/透视/空间张力但不得把产品缩小、后退或当背景。
-
-FAIL：为了主标题视觉冲击让产品变成小摆设。
-
-## Test R11｜Category Router 依赖视觉分析
-
-PASS：VISION_MODEL 判断 food_category / cuisine_family / positioning，再进入品类系统。
-
-FAIL：所有食品默认用同一套中式大字海报。
-
-## Test R12｜连接失效自动退出生产
-
-条件：Key 失效、模型名无效、参考图端点不可用或 VISION_MODEL 不能读图。
-
-PASS：切回 `SETUP_GATE`，只提示修复具体缺失项。
-
-FAIL：继续假装生成流程正常。
+## R15｜连接失效回 SETUP_GATE
+Key、模型、参考图编辑、视觉读取或 Stage A→B 传递失效时，退出 PRODUCTION，只修复缺失项。
