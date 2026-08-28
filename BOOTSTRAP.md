@@ -1,11 +1,10 @@
 # PP-food-KV-001 Bootstrap Protocol
 
-本文件用于跨智能体冷启动与恢复，防止只读 `SKILL.md`、漏读 Category / Typography / Upper-Bound / QC 规则后直接出 KV。
+本文件用于跨智能体冷启动与恢复，防止只读 `SKILL.md`、漏读 Stage A Bridge / Category / Typography / Upper-Bound / QC 后直接出 KV。
 
 ## 1. Bootstrap Triggers
 
 以下任一情况必须重新执行：
-
 - 首次 clone / 安装 / 加载；
 - 新智能体或新会话；
 - `VERSION` 变化；
@@ -16,7 +15,7 @@
 
 ## 2. Mandatory Read Order
 
-在任何生产动作之前，按顺序读取：
+任何生产动作之前按顺序读取：
 
 ```text
 1. VERSION
@@ -25,18 +24,18 @@
 4. HANDOFF.md
 5. REQUIRED_READ_SET.md
 6. PRE_FLIGHT_CHECKLIST.md
-7. REQUIRED_READ_SET.md 中的 ALWAYS_LOAD references
+7. REQUIRED_READ_SET.md 的 COLD_START_ALWAYS_LOAD references
 8. tests/runtime-handoff-tests.md
 9. tests/test-cases.md
 10. EXECUTION_CONTRACT_TEMPLATE.md
 ```
 
 禁止：
-- 自行跳过 ALWAYS_LOAD；
-- 只看摘要代替正文；
-- 未完成 Mandatory Read 就先生成一版；
+- 自行跳过 COLD_START_ALWAYS_LOAD；
+- 用摘要代替正文；
+- Mandatory Read 未完成就先生成一版；
 - 用旧会话记忆替代当前仓库；
-- 因上一张效果好而继承上一品类视觉皮肤。
+- 因上一张效果好而继承上一品类具体视觉皮肤。
 
 ## 3. Rule Authority
 
@@ -49,13 +48,13 @@ Acceptance / regression: tests/
 Current-job compilation: EXECUTION_CONTRACT_TEMPLATE.md
 ```
 
-如出现真实冲突：
+发现真实冲突：
 
 ```text
 PRODUCTION_GATE = BLOCKED
 ```
 
-指出冲突，不得自行挑一个版本继续。
+指出冲突，不自行挑一个版本继续。
 
 ## 4. Bootstrap Proof
 
@@ -78,15 +77,15 @@ TRUE_UPPER_BOUND_CAN_REDESIGN_PRODUCT = FALSE
 ```
 
 还必须能解释：
-- “只迁移方法，不迁移上一品类皮肤”；
+- 只迁移方法，不迁移上一品类皮肤；
 - 主标题、副标题、Slogan、辅助信息为什么必须形成完整空间文字系统；
 - 视觉上限与 Food Fidelity 冲突时怎么处理。
 
-任一答不准 → 重新读对应文件。
+任一答不准 → 重读对应文件。
 
 ## 5. Runtime Gate
 
-Bootstrap Proof 通过后执行 `PRE_FLIGHT_CHECKLIST.md`。
+Bootstrap Proof 后执行 `PRE_FLIGHT_CHECKLIST.md`。
 
 只有：
 
@@ -104,18 +103,19 @@ READY
 RUNTIME_STATE = READY_WAITING_FOR_START
 ```
 
-收到用户“启动”后进入 PRODUCTION。
+等待用户“启动”后进入 PRODUCTION。
 
 ## 6. Production Refresh
 
-进入 PRODUCTION 后，每个新任务必须：
+每个新 B 任务必须：
 
-1. 刷新当前 `RUNTIME_MANIFEST.md` P0 规则；
-2. 建立新的 `CURRENT_JOB_FACTS`；
-3. 若为 B，先真实完成 Stage A 并取得当前任务 Stage A PASS 图；
-4. 按当前食品重新 Category Route；
-5. 加载 `REQUIRED_READ_SET.md` 指定的当前品类 CONDITIONAL references；
-6. 编译新的 `EXECUTION_CONTRACT`；
-7. Contract / Stage A reference / Copy Allowlist 未完成不得调用 Stage B IMAGE_MODEL。
+1. 刷新 `RUNTIME_MANIFEST.md`；
+2. 新建 `CURRENT_JOB_FACTS`；
+3. 真实完成 Stage A 并取得当前任务 Stage A PASS 图；
+4. 初步 Category Route；
+5. 读取 `REQUIRED_READ_SET.md` 的 `B_JOB_ALWAYS_LOAD`；
+6. 加载当前任务需要的 `CONDITIONAL_LOAD`；
+7. 编译新的 B `EXECUTION_CONTRACT`；
+8. Contract / Stage A reference / Copy Lists 未完成不得调用 Stage B IMAGE_MODEL。
 
-长对话后无法证明 P0 规则仍在活跃上下文 → 重新 Bootstrap。
+长对话后无法证明 Cold-Start Core 仍在活跃上下文 → 重新 Bootstrap。
