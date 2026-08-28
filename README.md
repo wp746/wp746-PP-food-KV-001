@@ -2,17 +2,15 @@
 
 高保真、跨品类、品类原生的 Stage B KV / Campaign Skill。
 
-当前版本：**2.0.0**
+当前版本：**2.0.1**
 
 ## 目标
 
 把 `PP-food-001` 的当前任务 Stage A PASS 图继续升级为 9:16 专业 KV，同时保持真实产品第一主角，并根据当前食品品类重新设计字体、背景、材质、空间、信息密度和 One Big Idea。
 
-## V2.0 的重点
+## V2.0 架构
 
-V2.0 解决“换一个智能体就漏读、串皮肤、跳 Stage A、主副标题变平、乱补商业信息”的问题。
-
-新增 fail-closed runtime protocol：
+跨智能体 fail-closed runtime protocol：
 
 ```text
 AGENTS.md
@@ -26,19 +24,26 @@ AGENTS.md
 → QC / targeted retry
 ```
 
-核心变化：
-- P0 规则只在 `RUNTIME_MANIFEST.md` 定义一次；
-- Mandatory Read + 读取证明，不能只说“我读过了”；
-- B 必须真实经过 Stage A；
-- Stage B reference 只能是当前任务 Stage A PASS 图；
-- 每个新食品重新 Category Route；
-- 历史任务事实和上一品类视觉皮肤默认全部失效；
-- 每个 B 任务先建立 `COPY_ALLOWLIST / COPY_BLOCKLIST` 与 Execution Contract；
-- 信息不足时降低密度，不靠编造事实填满；
-- 主标题、副标题、Slogan、卖点、品牌/Utility 形成完整品类原生空间文字系统；
-- TRUE_UPPER_BOUND 默认开启，但绝不通过重做产品实现；
-- Codex 可由根目录 `AGENTS.md` 自动进入 Bootstrap；
-- 仓库不保存任何具体聚合平台、URL、Key 或私有模型配置。
+核心：B 必经 A、当前 Stage A PASS 为唯一 Stage B reference、每任务重新 Category Route、Previous Skin / Legacy Entity 隔离、Copy Allowlist / Blocklist、完整空间文字系统、TRUE_UPPER_BOUND 不改产品。
+
+## V2.0.1 稳定性补丁
+
+修正“没有真实 A→B 证据却把运行能力写成已验证”的问题：
+
+```text
+RUNTIME_CAPABILITIES_DECLARED
+!=
+RUNTIME_CAPABILITIES_VERIFIED
+```
+
+- 静态工具/schema/连接只能证明 `DECLARED = PASS`；
+- 只有真实完整 A→B 链路成功，或匹配 `FULL_A_TO_B` verified Runtime Profile，才是 `VERIFIED = PASS`；
+- 没有 profile 时可以 READY，但必须标记 `VERIFIED = PENDING` 与 `FIRST_LIVE_VERIFICATION_REQUIRED = TRUE`；
+- 第一笔真实 B 业务兼任完整验证，不额外生成测试海报；
+- 如果第一笔只有 A，只建立 `STAGE_A` scope evidence，不冒充完整 B 链路已验证；
+- verified profile 存在宿主私有持久状态，配置 fingerprint 不变即可跨会话复用；
+- 配置变化或实际读图/reference edit/A→B pass-through/QC 回读失败立即使 profile 失效；
+- profile fingerprint 不得包含 API Key、Token、完整私有 URL 或用户凭据。
 
 ## 用户入口
 
@@ -58,10 +63,8 @@ AGENTS.md
 KV_MODE = TRUE_UPPER_BOUND
 ```
 
-上限发生在当前品类自己的：背景、字体人格、空间介质、材质、透视、光影、One Big Idea 和 Campaign Finish。
-
-不上限食物本体。
+上限发生在当前品类自己的背景、字体人格、空间介质、材质、透视、光影、One Big Idea 和 Campaign Finish；不上限食物本体。
 
 ## 首次安装
 
-从 `BOOTSTRAP.md` 开始。按 `HANDOFF.md` 配置视觉模型、参考图编辑模型、Credential 和 Stage A→B 图片传递能力；Pre-flight 全部 PASS 后等待用户说“启动”。
+从 `BOOTSTRAP.md` 开始。按 `HANDOFF.md` 配置视觉模型、参考图编辑模型、Credential 和 Stage A→B 图片传递能力；Pre-flight 的 Declared 能力完整后进入 READY，Verified 状态由 Runtime Profile 或首次真实业务链路决定。
