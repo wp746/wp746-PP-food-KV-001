@@ -2,7 +2,7 @@
 
 目标：**冷启动只加载不会偏向某个食品品类的核心规则；真正拿到当前图后，再强制加载当前品类/字体/空间规则。**
 
-## COLD_START_ALWAYS_LOAD｜冷启动核心必读
+## COLD_START_ALWAYS_LOAD｜冷启动核心 reference 必读
 
 ```text
 references/food-fidelity-bridge.md
@@ -13,9 +13,9 @@ references/product-hero-priority.md
 references/upper-bound-standard.md
 references/kv-qc.md
 references/retry-policy.md
-tests/runtime-handoff-tests.md
-tests/test-cases.md
 ```
+
+两份 tests 由 `BOOTSTRAP.md` 单独读取，不在这里重复列出。
 
 不得用摘要或“已经知道”代替正文。
 
@@ -31,7 +31,7 @@ tests/test-cases.md
 6. `upper-bound-standard.md`：True Upper-Bound 的定义、Product Lock 和 >=90 门槛是什么？
 7. `kv-qc.md`：Food / Typography / Design 的硬门槛是什么？
 8. `retry-policy.md`：为什么必须定向重试且不能无限重抽？
-9. 两份 tests：B 必经 A、9:16、Execution Contract、Fail Closed、Previous-Skin/Entity Contamination 的回归要求是什么？
+9. Bootstrap 单独读取的两份 tests：B 必经 A、9:16、Execution Contract、Fail Closed、Previous-Skin/Entity Contamination 的回归要求是什么？
 
 答不准任何一项 → 重读对应文件。
 
