@@ -1,10 +1,10 @@
 ---
 name: PP-food-KV-001
 description: Use when a real food photo should become a category-native professional KV/campaign poster while preserving the exact product and routing typography, background, materials and layout to the current food category.
-version: 2.0.0
+version: 2.0.1
 ---
 
-# PP-food-KV-001 V2.0.0
+# PP-food-KV-001 V2.0.1
 
 ## Mandatory Entry
 
@@ -45,13 +45,27 @@ Stage B 不得回退原始随手拍，也不得使用上一任务图片。
 必须使用：
 
 - `BOOTSTRAP.md` — 冷启动、恢复、读取证明；
-- `RUNTIME_MANIFEST.md` — A/B、9:16、Stage A Bridge、Product Hero、TRUE_UPPER_BOUND、Copy Truth、Fail-Closed 等 P0 规则；
-- `REQUIRED_READ_SET.md` — ALWAYS_LOAD / CONDITIONAL_LOAD；
-- `PRE_FLIGHT_CHECKLIST.md` — READY、Stage A dependency 和 B 生产门禁；
+- `RUNTIME_MANIFEST.md` — A/B、9:16、Stage A Bridge、Product Hero、TRUE_UPPER_BOUND、Copy Truth、Capability Evidence、Fail-Closed 等 P0 规则；
+- `REQUIRED_READ_SET.md` — `COLD_START_ALWAYS_LOAD / B_JOB_ALWAYS_LOAD / CONDITIONAL_LOAD`；
+- `PRE_FLIGHT_CHECKLIST.md` — READY、Stage A dependency、Declared/Verified capability evidence 和 B 生产门禁；
 - `EXECUTION_CONTRACT_TEMPLATE.md` — 每个 B 任务的当前产品、品类、文案与空间设计合同；
-- `HANDOFF.md` — 运行模型与图片传递能力。
+- `HANDOFF.md` — 运行模型、图片传递能力与 Runtime Profile。
 
 不要把整仓库 Markdown 原样拼进 IMAGE_MODEL Prompt。规则先由 Agent 阅读，再编译成当前任务 `EXECUTION_CONTRACT`，最后生成短、明确、品类原生的 Stage B 指令。
+
+## Capability Evidence Rule
+
+必须区分：
+
+```text
+RUNTIME_CAPABILITIES_DECLARED = PASS / BLOCKED
+RUNTIME_CAPABILITIES_VERIFIED = PASS / PENDING / BLOCKED
+FIRST_LIVE_VERIFICATION_REQUIRED = TRUE / FALSE
+```
+
+静态宿主能力不能冒充完整 A→B 已验证。没有匹配 `FULL_A_TO_B` verified profile 时，第一笔真实 B 任务兼任完整验证；不额外生成测试海报。若首次真实任务只有 A，只能建立 `STAGE_A` scope evidence，不能声称完整 B 链路 verified。
+
+配置 fingerprint 不变时允许跨会话复用 verified profile。
 
 ## Category-Native Requirement
 
@@ -83,7 +97,7 @@ Stage B 默认真正上限版，但定义与评分只以 `RUNTIME_MANIFEST.md` �
 
 必须执行 `tests/runtime-handoff-tests.md` 和 `tests/test-cases.md` 的行为约束。
 
-Mandatory Read、Pre-flight、Stage A PASS reference、Category Route、Copy lists、Execution Contract 或运行能力任一无法确认：
+Mandatory Read、Pre-flight、Stage A PASS reference、Category Route、Copy lists、Execution Contract 或 declared runtime ability 任一无法确认：
 
 ```text
 PRODUCTION_GATE = BLOCKED
@@ -93,4 +107,4 @@ PRODUCTION_GATE = BLOCKED
 
 ## Security Boundary
 
-仓库不得保存具体供应商名、私有聚合平台配置、实际 API Base URL、API Key、Token 或私有模型凭据。运行值由宿主 Secret / Environment / Connection 提供。
+仓库不得保存具体供应商名、私有聚合平台配置、实际 API Base URL、API Key、Token、私有模型凭据或 Runtime Profile 真实运行值。运行值由宿主 Secret / Environment / Connection / 私有持久状态提供。
