@@ -1,94 +1,67 @@
 # PP-food-KV-001
 
-Stage B 跨品类美食 KV / Campaign Skill。当前版本：**1.6.0**。
+高保真、跨品类、品类原生的 Stage B KV / Campaign Skill。
 
-## 默认入口规则
+当前版本：**2.0.0**
 
-```text
-A = 只出 Stage A 商拍
-B = 先 Stage A，再 Stage B KV
-未说 A/B 且无明显商业信息 = 默认 A
-未说 A/B 但给出产品名、店铺、标题、地址、价格、核心食材、卖点、新品等商业信息 = 自动 B
-DEFAULT_ASPECT_RATIO = 9:16
-DEFAULT_KV_MODE = TRUE_UPPER_BOUND
-```
+## 目标
 
-显式 A 优先于自动 B。任何 B 都不得跳过 Stage A。
+把 `PP-food-001` 的当前任务 Stage A PASS 图继续升级为 9:16 专业 KV，同时保持真实产品第一主角，并根据当前食品品类重新设计字体、背景、材质、空间、信息密度和 One Big Idea。
 
-## 核心方法
+## V2.0 的重点
 
-> **先锁产品，再识别品类，再用该品类自己的视觉语言做到真正上限。**
+V2.0 解决“换一个智能体就漏读、串皮肤、跳 Stage A、主副标题变平、乱补商业信息”的问题。
 
-真正上限不重做食物本体；它发生在背景、空间、字体、主副标题层级、材质、透视、光影、One Big Idea 和 Campaign 完成度。
-
-## 当前任务隔离
-
-每个新任务只使用当前图片、当前用户信息和当前链路产物。上一任务的品牌、菜名、食材、口味、标题皮肤、场景皮肤、配色和道具默认失效，除非用户明确要求沿用。
-
-## 品类原生设计
-
-Stage B 必须先路由食品品类，再决定：
-- typography personality；
-- headline / subtitle spatial medium；
-- layout；
-- color / material；
-- background / props；
-- information density。
-
-只迁移 Hero Product、透视、空间字、前中后景、遮挡、信息层级、负空间、One Big Idea 等**方法**，不迁移上一品类的具体视觉皮肤。
-
-## Product Hero
+新增 fail-closed runtime protocol：
 
 ```text
-1. PRODUCT / FOOD HERO
-2. HEADLINE
-3. SPATIAL CONCEPT
-4. SUBTITLE
-5. SLOGAN / SELLING POINTS
-6. BUSINESS / UTILITY INFO
+AGENTS.md
+→ BOOTSTRAP.md
+→ RUNTIME_MANIFEST.md
+→ REQUIRED_READ_SET.md
+→ PRE_FLIGHT_CHECKLIST.md
+→ EXECUTION_CONTRACT_TEMPLATE.md
+→ Stage A PASS
+→ Category-Native Stage B
+→ QC / targeted retry
 ```
 
-标题可以强，但产品必须更强。
+核心变化：
+- P0 规则只在 `RUNTIME_MANIFEST.md` 定义一次；
+- Mandatory Read + 读取证明，不能只说“我读过了”；
+- B 必须真实经过 Stage A；
+- Stage B reference 只能是当前任务 Stage A PASS 图；
+- 每个新食品重新 Category Route；
+- 历史任务事实和上一品类视觉皮肤默认全部失效；
+- 每个 B 任务先建立 `COPY_ALLOWLIST / COPY_BLOCKLIST` 与 Execution Contract；
+- 信息不足时降低密度，不靠编造事实填满；
+- 主标题、副标题、Slogan、卖点、品牌/Utility 形成完整品类原生空间文字系统；
+- TRUE_UPPER_BOUND 默认开启，但绝不通过重做产品实现；
+- Codex 可由根目录 `AGENTS.md` 自动进入 Bootstrap；
+- 仓库不保存任何具体聚合平台、URL、Key 或私有模型配置。
 
-## Full Spatial Typography
+## 用户入口
 
-主标题、副标题、Slogan 和辅助信息必须共同形成与当前品类匹配的空间文字系统。不能只把主标题做立体字，其他信息全部平贴。
+生产状态下：
+- `A` → 只执行 Stage A；
+- `B` → Stage A → QC → Stage A PASS → Stage B → QC；
+- 未说 A/B 且无明显商业信息 → 默认 A；
+- 未说 A/B 但给出产品/店铺/价格/地址/电话/主副标题/卖点等 → 自动 B，但仍先 A。
 
-例如烘焙类可以使用 warm serif / friendly sans、橱窗字、包装纸字、吊牌、晨光投影；咖啡饮品则偏现代无衬线、玻璃/窗面/投影字和 Lifestyle 留白。具体以 `references/category-visual-systems.md` 和 `references/typography-personality-map.md` 为准。
+具体硬规则以 `RUNTIME_MANIFEST.md` 为准。
 
-## 双 Skill 标准链路
+## 真正上限版
+
+默认：
 
 ```text
-原图
-→ PP-food-001 Stage A
-→ Stage A Fidelity QC
-→ Stage A PASS 图
-→ PP-food-KV-001 Stage B
-→ Category / Product Hero / Typography / KV QC
-→ 定向重试或交付
+KV_MODE = TRUE_UPPER_BOUND
 ```
 
-Stage B 必须使用当前任务 Stage A PASS 图作为参考图。
+上限发生在当前品类自己的：背景、字体人格、空间介质、材质、透视、光影、One Big Idea 和 Campaign Finish。
 
-## 最终硬门槛
+不上限食物本体。
 
-```text
-Food Fidelity >=95
-Vessel Fidelity >=98
-Typography Accuracy =100
-Category Visual Language >=90
-Typography-Category Match >=13/15
-Spatial Language Match >=13/15
-Full Text-System Spatiality >=9/10
-KV Design Quality >=90
-Product Dominance = PASS
-CATEGORY_SKIN_CONTAMINATION = FALSE
-Upper-Bound Readiness >=90
-LEGACY_ENTITY_CONTAMINATION = 0
-```
+## 首次安装
 
-## 运行环境
-
-首次安装读取 `HANDOFF.md`。仓库只保存通用能力约定；不要把具体供应商、模型服务 URL、API Key 或聚合平台配置写进 Skill。凭据由宿主 Secret / Environment / Connection 管理。
-
-详细规则以 `SKILL.md` 和 `references/` 为准。
+从 `BOOTSTRAP.md` 开始。按 `HANDOFF.md` 配置视觉模型、参考图编辑模型、Credential 和 Stage A→B 图片传递能力；Pre-flight 全部 PASS 后等待用户说“启动”。
