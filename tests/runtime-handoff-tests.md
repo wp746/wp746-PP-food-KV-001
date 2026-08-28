@@ -6,9 +6,9 @@
 PASS：优先读取 `BOOTSTRAP.md`，按 Mandatory Read Order 完成加载。
 FAIL：只读 `SKILL.md` 摘要或只读少数 references 后直接出 KV。
 
-## R02｜必读集不得选择性跳过
-PASS：`REQUIRED_READ_SET.md` 中 ALWAYS_LOAD 全部读取，并完成读取证明。
-FAIL：因为“当前是烘焙/饮品”就跳过 food-fidelity-bridge、product-hero、category-style-firewall、typography、upper-bound、retry、QC 或 tests。
+## R02｜Cold-Start Core 不得选择性跳过
+PASS：`REQUIRED_READ_SET.md` 中 `COLD_START_ALWAYS_LOAD` 全部读取，并完成读取证明。
+FAIL：自行跳过 Stage A Bridge、Category Firewall、Product Hero、Upper-Bound、QC 或 Retry 核心规则。
 
 ## R03｜读取证明必须复述硬规则
 Pre-flight 必须准确返回：
@@ -52,14 +52,15 @@ RUNTIME_STATE = READY_WAITING_FOR_START
 ## R10｜启动后自然语言生产
 进入 PRODUCTION 后用户只需上传图、说 A/B 或提供商业信息；不得要求用户理解内部 JSON、Visual System 或 Prompt。
 
-## R11｜每个 B 任务必须建立 Execution Contract
-合同至少包含：CURRENT_JOB_FACTS、Stage A PASS reference、Category Route、Copy Allowlist、Copy Blocklist、Product Priority、TRUE_UPPER_BOUND、Forbidden。
+## R11｜每个 B 任务必须完成 B Job Reads + Execution Contract
+PASS：Stage A PASS 后读取 `B_JOB_ALWAYS_LOAD`，解析当前品类字体/空间系统，再建立当前任务 B Contract。
+FAIL：冷启动读完后长期不刷新当前品类规则，或直接套上一任务皮肤。
 
 ## R12｜Stage A 输出必须传给 Stage B
 FAIL：Stage B 回退到原始随手拍或上一任务图片。
 
 ## R13｜每个新任务必须重新路由品类
-FAIL：因为上一张效果好，直接继承上一品类字体、背景、材质、圆章、门头、橱窗、配色或道具皮肤。
+FAIL：因为上一张效果好，直接继承上一品类字体、背景、材质、配色、道具或信息模块皮肤。
 
 ## R14｜上下文压缩/恢复必须重新引导
 如果智能体无法证明当前 `RUNTIME_MANIFEST.md` 与 P0 规则仍在活跃上下文，应重新 BOOTSTRAP / Pre-flight。
