@@ -1,8 +1,8 @@
 # PP-food-KV-001 Pre-Flight Checklist
 
-在 READY 或任何 Stage B 生产动作前执行。本清单是运行门禁，不是可选说明。
+在 READY 或任何 Stage B 生产动作前执行。本清单是运行门禁。
 
-## A. Bootstrap Read Status
+## A. Cold-Start Read Status
 
 必须得到：
 
@@ -12,7 +12,7 @@ RUNTIME_MANIFEST_READ = PASS
 SKILL_READ = PASS
 HANDOFF_READ = PASS
 REQUIRED_READ_SET_READ = PASS
-ALWAYS_LOAD_REFERENCES_READ = PASS
+COLD_START_CORE_REFERENCES_READ = PASS
 RUNTIME_TESTS_READ = PASS
 REGRESSION_TESTS_READ = PASS
 EXECUTION_CONTRACT_TEMPLATE_READ = PASS
@@ -43,15 +43,11 @@ LEGACY_ENTITY_CONTAMINATION_ALLOWED = FALSE
 TRUE_UPPER_BOUND_CAN_REDESIGN_PRODUCT = FALSE
 ```
 
-并能说明：
-- Product > Headline；
-- 方法可迁移、视觉皮肤不可跨任务继承；
-- 主副标题/辅助文字必须属于同一品类空间文字系统；
-- 上限与 Food Fidelity 冲突时降低设计激进度。
+并能说明：Product > Headline；方法可迁移、皮肤不可跨任务继承；完整文字系统必须品类原生；上限与 Food Fidelity 冲突时降低设计激进度。
 
 ## C. Runtime Capabilities
 
-仅确认状态，不回显完整密钥：
+只确认状态，不回显完整密钥：
 
 ```text
 VISION_MODEL_IMAGE_INPUT = PASS / MISSING / UNKNOWN
@@ -83,7 +79,7 @@ READY
 RUNTIME_STATE = READY_WAITING_FOR_START
 ```
 
-然后等待用户说“启动”。
+等待用户说“启动”。
 
 ## F. Per-Job Intent Gate
 
@@ -93,9 +89,9 @@ INTENT_ROUTER = RESOLVED
 ASPECT_RATIO = 9:16
 ```
 
-如果 intent = A：交给 Stage A，禁止自动进入 B。
+intent = A → 交给 Stage A，禁止自动进入 B。
 
-如果 intent = B：继续以下门禁。
+intent = B → 继续以下门禁。
 
 ## G. Stage A Gate For B
 
@@ -107,24 +103,32 @@ STAGE_B_REFERENCE = STAGE_A_PASS_IMAGE
 
 任一缺失 → B BLOCKED，先修 Stage A。
 
-## H. Stage B Contract Gate
+## H. Stage B Job-Read Gate
+
+```text
+B_JOB_ALWAYS_LOAD = PASS
+SELECTED_VISUAL_SYSTEM = RESOLVED
+TYPOGRAPHY_PERSONALITY = RESOLVED
+HEADLINE_SPATIAL_MEDIUM = RESOLVED
+SUBTITLE_SPATIAL_MEDIUM = RESOLVED
+FULL_TEXT_SYSTEM_PLAN = CREATED
+```
+
+## I. Stage B Contract Gate
 
 调用 Stage B IMAGE_MODEL 前必须确认：
 
 ```text
-CATEGORY_ROUTE = RESOLVED
-SELECTED_VISUAL_SYSTEM = RESOLVED
 COPY_ALLOWLIST = CREATED
 COPY_BLOCKLIST = CREATED
 PRODUCT_PRIORITY = 1
-FULL_TEXT_SYSTEM_PLAN = CREATED
 TRUE_UPPER_BOUND_PLAN = CATEGORY_NATIVE
 EXECUTION_CONTRACT = PASS
 ```
 
-如果信息不足，降低信息密度或询问最少必要事实；禁止为了填版面编造商业硬事实。
+信息不足时降低信息密度或询问一个最少必要事实；禁止为了填版面编造商业硬事实。
 
-## I. Recovery
+## J. Recovery
 
 版本变化、连接失效、Stage A→B 传递失败、上下文压缩或 P0 规则无法准确复述：
 
@@ -132,4 +136,4 @@ EXECUTION_CONTRACT = PASS
 RUNTIME_STATE = SETUP_GATE
 ```
 
-重新 BOOTSTRAP / Pre-flight，不凭旧摘要继续生产。
+重新 BOOTSTRAP / Pre-flight，不凭旧摘要继续。
