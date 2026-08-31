@@ -1,126 +1,104 @@
 ---
 name: PP-food-KV-001
-description: Use when a user provides a real food or packaged-product photo and wants a professional KV or campaign poster, especially when product fidelity, category-native styling, copy accuracy, and cross-agent reproducibility matter.
-version: 2.1.0
+description: Use when a real food, beverage, bakery, or packaged-product photo should become a professional KV or campaign poster and product fidelity, category-native styling, copy accuracy, and cross-agent reproducibility matter.
+version: 2.2.0
 ---
 
-# PP-food-KV-001 V2.1.0
+# PP-food-KV-001 V2.2.0
 
-## Mandatory Entry
+## Entry
 
-**Do not start KV production from this file alone.**
+Start with `BOOTSTRAP.md`.
 
-Before routing, copy generation, prompt building or image generation:
+Normal production uses the **Runtime Minimal Core** only. Do not load `tests/*`, all references, or all 12 category skins into production context.
+
+Authority:
 
 ```text
-READ BOOTSTRAP.md
-→ complete Mandatory Read Order (includes SOP-B.md)
-→ run PRE_FLIGHT_CHECKLIST.md
-→ PRODUCTION_GATE must PASS
+P0 invariants        → RUNTIME_MANIFEST.md
+B operator SOP       → SOP-B.md
+runtime / A bridge   → HANDOFF.md
+per-job reads        → REQUIRED_READ_SET.md
+production gate      → PRE_FLIGHT_CHECKLIST.md
+current B contract   → EXECUTION_CONTRACT_TEMPLATE.md
 ```
-
-`RUNTIME_MANIFEST.md` is the canonical P0 runtime rule source. Old conversation memory, host defaults, summaries or a previous successful category skin must never weaken it.
-
-`SOP-B.md` is the canonical cross-agent operator SOP for `执行B / B`. A new agent must read it before production; do not reconstruct B from conversation memory.
 
 ## Role
 
-本 Skill 是 **Stage B / Category-Native KV Engine**，但任何 B 请求都必须真实经过 Stage A：
-
 ```text
 CURRENT USER IMAGE
-→ PP-food-001 Stage A (follow PP-food-001/SOP-A.md)
-→ Stage A QC
-→ CURRENT JOB Stage A PASS IMAGE
-→ current-category routing
-→ B Execution Contract
+→ PP-food-001 current Stage A
+→ Stage A QC PASS
+→ CURRENT_STAGE_A_PASS_IMAGE
+→ current Category Route
+→ compact B Execution Contract
 → Stage B IMAGE_MODEL
-→ Product / Typography / Category / Upper-Bound QC
+→ QC
 → targeted retry
-→ deliver
 ```
 
-Stage B 不得回退原始随手拍，也不得使用上一任务图片。
+Stage B must never use the raw snapshot after current Stage A PASS exists, and must never use a previous-job image.
 
-## Runtime Protocol
-
-必须使用：
-
-- `BOOTSTRAP.md` — 冷启动、恢复、读取证明；
-- `RUNTIME_MANIFEST.md` — A/B、9:16、Stage A Bridge、Product Hero、TRUE_UPPER_BOUND、Copy Truth、Capability Evidence、Fail-Closed 等 P0 规则；
-- `SOP-B.md` — B 自然语言交互、信息门槛、Stage A Bridge、Category Router、Product Hero、Spatial Typography、Upper-Bound、QC 与重试的 Canonical SOP；
-- `REQUIRED_READ_SET.md` — `COLD_START_ALWAYS_LOAD / B_JOB_ALWAYS_LOAD / CONDITIONAL_LOAD`；
-- `PRE_FLIGHT_CHECKLIST.md` — READY、Stage A dependency、Declared/Verified capability evidence 和 B 生产门禁；
-- `EXECUTION_CONTRACT_TEMPLATE.md` — 每个 B 任务的当前产品、品类、文案与空间设计合同；
-- `HANDOFF.md` — 运行模型、图片传递能力与 Runtime Profile。
-
-不要把整仓库 Markdown 原样拼进 IMAGE_MODEL Prompt。规则先由 Agent 阅读，再编译成当前任务 `EXECUTION_CONTRACT`，最后生成短、明确、品类原生的 Stage B 指令。
-
-## Capability Evidence Rule
-
-必须区分：
+## Non-Negotiables
 
 ```text
-RUNTIME_CAPABILITIES_DECLARED = PASS / BLOCKED
-RUNTIME_CAPABILITIES_VERIFIED = PASS / PENDING / BLOCKED
-FIRST_LIVE_VERIFICATION_REQUIRED = TRUE / FALSE
+B_REQUIRES_CURRENT_STAGE_A_PASS = TRUE
+STAGE_B_REFERENCE = CURRENT_JOB_STAGE_A_PASS_IMAGE
+PRODUCT_PRIORITY = 1
+HEADLINE_PRIORITY = 2
+TYPOGRAPHY_ACCURACY = 100%
+PREVIOUS_JOB_SKIN_IMPORT = OFF
+TRUE_UPPER_BOUND_CAN_REDESIGN_PRODUCT = FALSE
+RETRY = TARGETED_NOT_RANDOM
 ```
 
-静态宿主能力不能冒充完整 A→B 已验证。没有匹配 `FULL_A_TO_B` verified profile 时，第一笔真实 B 任务兼任完整验证；不额外生成测试海报。若首次真实任务只有 A，只能建立 `STAGE_A` scope evidence，不能声称完整 B 链路 verified。
+## Execute B
 
-配置 fingerprint 不变时允许跨会话复用 verified profile。
+When the user says `B / 执行B`:
 
-## Execute B Interaction Contract
+1. complete current Stage A first;
+2. inspect current copy;
+3. build `COPY_ALLOWLIST / COPY_BLOCKLIST`;
+4. re-route the current food category;
+5. activate only the current visual system + current typography rules;
+6. build a compact current-job contract;
+7. generate Stage B;
+8. QC and targeted retry.
 
-当用户说 `B / 执行B`：
+If copy is sparse, the product name may be the headline and non-factual campaign/subtitle copy may be generated. “按默认文案来” does **not** authorize invented phone numbers, addresses, prices, certifications, awards, origin, process, history or unverified ingredients.
 
-- 必须先执行当前任务 Stage A；
-- 默认检查 `headline + subtitle + auxiliary_information>=1`；
-- 信息不足时只追问最少缺失项；
-- 用户说“按默认文案来”时，可生成非事实型传播/感官软文案；
-- 未提供的电话、地址、价格、认证、奖项、品牌历史等硬事实不得编造；
-- 当前任务必须新建 `COPY_ALLOWLIST / COPY_BLOCKLIST`。
+## Product Hero + Category-Native Rule
 
-详细规则以 `SOP-B.md` 与 `references/information-gate.md` 为准。
+Transfer methods, never previous skin.
 
-## Category-Native Requirement
+Allowed to transfer: Hero Product, perspective, spatial typography method, depth, controlled occlusion, hierarchy, negative space, One Big Idea.
 
-每个新任务必须重新路由当前食品品类。
+Do not automatically transfer: fonts, title material, signboard, arch, ribbon, lightbox, badges, palette, props, information modules, background skin.
 
-可以迁移：Hero Product、透视、空间字体方法、前中后景、受控遮挡、层级、负空间、One Big Idea。
+Headline can be strong; product must remain stronger.
 
-不能迁移上一任务具体皮肤：字体、标题材质、门头、牌匾、橱窗、丝带、灯箱、圆章、拱门、配色、道具、卖点模板、背景模板。
+## Anti-Drift Runtime Rule
 
-具体规则按 `REQUIRED_READ_SET.md` 加载对应 references。
+Every new image creates new `CURRENT_JOB_FACTS` and a new Category Route.
 
-## True Upper-Bound
+IMAGE_MODEL receives only:
 
-Stage B 默认真正上限版，但定义与评分只以 `RUNTIME_MANIFEST.md`、`SOP-B.md` 和 `references/upper-bound-standard.md` 为准。
+```text
+current Stage A PASS image
++ compact current B contract
++ compact current B prompt
+```
 
-核心原则：
+Never send the whole repository or all category examples to IMAGE_MODEL.
 
-> **食物极度保守锁定；当前品类自己的背景与字体极度上限设计。**
+## Fail Closed
 
-标题可以强，但产品必须更强。主标题、副标题、Slogan、卖点和品牌/实用信息必须形成同一品类原生的完整空间文字系统。
-
-## Copy Truth
-
-每个 B 任务必须创建 `COPY_ALLOWLIST` 与 `COPY_BLOCKLIST`。
-
-用户未提供的电话、地址、价格、食材、口味、制作工艺、认证、奖项、品牌历史等硬事实不得自动补齐。信息少时降低密度，不靠编造填满版面。
-
-## Acceptance
-
-必须执行 `tests/runtime-handoff-tests.md` 和 `tests/test-cases.md` 的行为约束。
-
-Mandatory Read、Pre-flight、Stage A PASS reference、Category Route、Copy lists、Execution Contract 或 declared runtime ability 任一无法确认：
+If current Stage A PASS is missing, current category is unresolved, copy lists are missing, VISION/IMAGE/pass-through/credential capability is unavailable, the contract is contaminated/incomplete, or a P0 conflict is unresolved:
 
 ```text
 PRODUCTION_GATE = BLOCKED
 ```
 
-禁止先出一版再补读规则。
+## Security
 
-## Security Boundary
-
-仓库不得保存具体供应商名、私有聚合平台配置、实际 API Base URL、API Key、Token、私有模型凭据或 Runtime Profile 真实运行值。运行值由宿主 Secret / Environment / Connection / 私有持久状态提供。
+Never store real API keys, private provider configuration, private base URLs, or user credentials in the repository.
