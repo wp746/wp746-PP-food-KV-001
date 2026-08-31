@@ -1,10 +1,10 @@
 ---
 name: PP-food-KV-001
-description: Use when a real food photo should become a category-native professional KV/campaign poster while preserving the exact product and routing typography, background, materials and layout to the current food category.
-version: 2.0.1
+description: Use when a user provides a real food or packaged-product photo and wants a professional KV or campaign poster, especially when product fidelity, category-native styling, copy accuracy, and cross-agent reproducibility matter.
+version: 2.1.0
 ---
 
-# PP-food-KV-001 V2.0.1
+# PP-food-KV-001 V2.1.0
 
 ## Mandatory Entry
 
@@ -14,12 +14,14 @@ Before routing, copy generation, prompt building or image generation:
 
 ```text
 READ BOOTSTRAP.md
-→ complete Mandatory Read Order
+→ complete Mandatory Read Order (includes SOP-B.md)
 → run PRE_FLIGHT_CHECKLIST.md
 → PRODUCTION_GATE must PASS
 ```
 
 `RUNTIME_MANIFEST.md` is the canonical P0 runtime rule source. Old conversation memory, host defaults, summaries or a previous successful category skin must never weaken it.
+
+`SOP-B.md` is the canonical cross-agent operator SOP for `执行B / B`. A new agent must read it before production; do not reconstruct B from conversation memory.
 
 ## Role
 
@@ -27,7 +29,7 @@ READ BOOTSTRAP.md
 
 ```text
 CURRENT USER IMAGE
-→ PP-food-001 Stage A
+→ PP-food-001 Stage A (follow PP-food-001/SOP-A.md)
 → Stage A QC
 → CURRENT JOB Stage A PASS IMAGE
 → current-category routing
@@ -46,6 +48,7 @@ Stage B 不得回退原始随手拍，也不得使用上一任务图片。
 
 - `BOOTSTRAP.md` — 冷启动、恢复、读取证明；
 - `RUNTIME_MANIFEST.md` — A/B、9:16、Stage A Bridge、Product Hero、TRUE_UPPER_BOUND、Copy Truth、Capability Evidence、Fail-Closed 等 P0 规则；
+- `SOP-B.md` — B 自然语言交互、信息门槛、Stage A Bridge、Category Router、Product Hero、Spatial Typography、Upper-Bound、QC 与重试的 Canonical SOP；
 - `REQUIRED_READ_SET.md` — `COLD_START_ALWAYS_LOAD / B_JOB_ALWAYS_LOAD / CONDITIONAL_LOAD`；
 - `PRE_FLIGHT_CHECKLIST.md` — READY、Stage A dependency、Declared/Verified capability evidence 和 B 生产门禁；
 - `EXECUTION_CONTRACT_TEMPLATE.md` — 每个 B 任务的当前产品、品类、文案与空间设计合同；
@@ -67,6 +70,19 @@ FIRST_LIVE_VERIFICATION_REQUIRED = TRUE / FALSE
 
 配置 fingerprint 不变时允许跨会话复用 verified profile。
 
+## Execute B Interaction Contract
+
+当用户说 `B / 执行B`：
+
+- 必须先执行当前任务 Stage A；
+- 默认检查 `headline + subtitle + auxiliary_information>=1`；
+- 信息不足时只追问最少缺失项；
+- 用户说“按默认文案来”时，可生成非事实型传播/感官软文案；
+- 未提供的电话、地址、价格、认证、奖项、品牌历史等硬事实不得编造；
+- 当前任务必须新建 `COPY_ALLOWLIST / COPY_BLOCKLIST`。
+
+详细规则以 `SOP-B.md` 与 `references/information-gate.md` 为准。
+
 ## Category-Native Requirement
 
 每个新任务必须重新路由当前食品品类。
@@ -79,7 +95,7 @@ FIRST_LIVE_VERIFICATION_REQUIRED = TRUE / FALSE
 
 ## True Upper-Bound
 
-Stage B 默认真正上限版，但定义与评分只以 `RUNTIME_MANIFEST.md` 和 `references/upper-bound-standard.md` 为准。
+Stage B 默认真正上限版，但定义与评分只以 `RUNTIME_MANIFEST.md`、`SOP-B.md` 和 `references/upper-bound-standard.md` 为准。
 
 核心原则：
 
