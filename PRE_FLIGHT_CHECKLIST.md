@@ -1,207 +1,117 @@
 # PP-food-KV-001 Pre-Flight Checklist
 
-在 READY 或任何 Stage B 生产动作前执行。本清单是运行门禁。
+目标：只拦真正会导致 B 漂移/串台/失败的问题，不让门禁本身成为上下文负担。
 
-## A. Cold-Start Read Status
+## 1. Bootstrap Status
 
-必须得到：
+必须：
 
 ```text
 VERSION_READ = PASS
 RUNTIME_MANIFEST_READ = PASS
 SKILL_READ = PASS
+SOP_B_READ = PASS
 HANDOFF_READ = PASS
 REQUIRED_READ_SET_READ = PASS
-COLD_START_CORE_REFERENCES_READ = PASS
-RUNTIME_TESTS_READ = PASS
-REGRESSION_TESTS_READ = PASS
 EXECUTION_CONTRACT_TEMPLATE_READ = PASS
 ```
 
-任一不是 PASS：
+`tests/*` 不属于正常生产 pre-flight。
+
+## 2. Runtime Capability Gate
+
+必须静态确认：
 
 ```text
-PRODUCTION_GATE = BLOCKED
+VISION_MODEL_CAN_READ_ORIGINAL = PASS
+VISION_MODEL_CAN_READ_STAGE_A = PASS
+VISION_MODEL_CAN_READ_STAGE_B = PASS
+IMAGE_MODEL_REFERENCE_EDIT = PASS
+PP_FOOD_STAGE_A_DEPENDENCY = PASS
+STAGE_A_OUTPUT_TO_STAGE_B = PASS
+CREDENTIAL = PASS
 ```
 
-## B. Bootstrap Proof
+任一 UNKNOWN/MISSING → `PRODUCTION_GATE = BLOCKED`。
 
-必须准确确认：默认 9:16、默认 A、显式 A 覆盖自动 B、默认 TRUE_UPPER_BOUND、B 必经 A、Stage B reference = 当前任务 Stage A PASS 图、Product > Headline、Typography Accuracy = 100%、不允许 Legacy Entity / Category Skin 污染、上限版不得重做产品。
+静态能力只证明 `DECLARED = PASS`；没有真实 A→B 证据时保持 `VERIFIED = PENDING`。
 
-## C. Declared Runtime Capabilities
-
-静态检查以下能力是否已配置/可路由：
-
-```text
-VISION_MODEL_IMAGE_INPUT = PASS / MISSING / UNKNOWN
-VISION_MODEL_CAN_READ_STAGE_A_OUTPUT = PASS / MISSING / UNKNOWN
-VISION_MODEL_CAN_READ_STAGE_B_OUTPUT = PASS / MISSING / UNKNOWN
-IMAGE_MODEL_REFERENCE_EDIT = PASS / MISSING / UNKNOWN
-CREDENTIAL = PASS / MISSING / UNKNOWN
-USER_IMAGE_TO_STAGE_A = PASS / MISSING / UNKNOWN
-STAGE_A_OUTPUT_TO_STAGE_B = PASS / MISSING / UNKNOWN
-STAGE_B_OUTPUT_TO_AGENT = PASS / MISSING / UNKNOWN
-PP_FOOD_STAGE_A_DEPENDENCY = PASS / MISSING / UNKNOWN
-```
-
-全部 PASS：
-
-```text
-RUNTIME_CAPABILITIES_DECLARED = PASS
-```
-
-任一 MISSING/UNKNOWN：
-
-```text
-RUNTIME_CAPABILITIES_DECLARED = BLOCKED
-PRODUCTION_GATE = BLOCKED
-```
-
-静态 schema/宿主说明不能直接证明 `RUNTIME_CAPABILITIES_VERIFIED = PASS`。
-
-## D. Verified Runtime Profile Check
-
-检查宿主私有持久状态。
-
-若：
-
-```text
-RUNTIME_PROFILE_VERIFIED = TRUE
-RUNTIME_PROFILE_SCOPE = FULL_A_TO_B
-RUNTIME_PROFILE_FINGERPRINT_MATCH = TRUE
-```
-
-则：
-
-```text
-RUNTIME_CAPABILITIES_VERIFIED = PASS
-FIRST_LIVE_VERIFICATION_REQUIRED = FALSE
-```
-
-若 profile 不存在、scope 仅为 STAGE_A 或 fingerprint 不匹配：
-
-```text
-RUNTIME_CAPABILITIES_VERIFIED = PENDING
-FIRST_LIVE_VERIFICATION_REQUIRED = TRUE
-```
-
-这不等于配置缺失，只表示完整 A→B 链路尚无当前配置的真实证据。
-
-## E. Security Check
-
-```text
-PRIVATE_PROVIDER_CONFIG_IN_REPO = FALSE
-API_KEY_EXPOSED_IN_NORMAL_CHAT = FALSE
-RUNTIME_PROFILE_STORED_OUTSIDE_REPO = TRUE
-```
-
-## F. Ready Decision
-
-满足：
-
-```text
-BOOTSTRAP_READ = PASS
-RUNTIME_CAPABILITIES_DECLARED = PASS
-STAGE_A_DEPENDENCY = PASS
-PRODUCTION_GATE = PASS
-```
-
-即可：
-
-```text
-READY
-RUNTIME_STATE = READY_WAITING_FOR_START
-RUNTIME_CAPABILITIES_DECLARED = PASS
-RUNTIME_CAPABILITIES_VERIFIED = PASS / PENDING
-FIRST_LIVE_VERIFICATION_REQUIRED = TRUE / FALSE
-```
-
-如果 `VERIFIED = PENDING`，禁止声称“已经 smoke tested / 完整 A→B 已验证”。等待用户说“启动”。
-
-## G. Per-Job Intent Gate
-
-```text
-CURRENT_JOB_FACTS = CREATED
-INTENT_ROUTER = RESOLVED
-ASPECT_RATIO = 9:16
-```
-
-intent = A → 交给 Stage A，禁止自动进入 B。
-
-intent = B → 继续以下门禁。
-
-## H. Stage A Gate For B
-
-```text
-STAGE_A_QC = PASS
-STAGE_A_PASS_IMAGE = CURRENT_JOB_ONLY
-STAGE_B_REFERENCE = STAGE_A_PASS_IMAGE
-```
-
-任一缺失 → B BLOCKED，先修 Stage A。
-
-## I. Stage B Job-Read Gate
-
-```text
-B_JOB_ALWAYS_LOAD = PASS
-SELECTED_VISUAL_SYSTEM = RESOLVED
-TYPOGRAPHY_PERSONALITY = RESOLVED
-HEADLINE_SPATIAL_MEDIUM = RESOLVED
-SUBTITLE_SPATIAL_MEDIUM = RESOLVED
-FULL_TEXT_SYSTEM_PLAN = CREATED
-```
-
-## J. Stage B Contract Gate
-
-调用 Stage B IMAGE_MODEL 前必须确认：
-
-```text
-COPY_ALLOWLIST = CREATED
-COPY_BLOCKLIST = CREATED
-PRODUCT_PRIORITY = 1
-TRUE_UPPER_BOUND_PLAN = CATEGORY_NATIVE
-EXECUTION_CONTRACT = PASS
-```
-
-信息不足时降低信息密度或询问一个最少必要事实；禁止为了填版面编造商业硬事实。
-
-## K. First Live Full A→B Verification
-
-如果 `FIRST_LIVE_VERIFICATION_REQUIRED = TRUE`，不要额外做无业务价值 smoke test。第一笔真实 B 任务本身兼任完整验证。
-
-最终交付前必须实际确认：
-
-```text
-LIVE_VISION_READ_ORIGINAL = PASS
-LIVE_STAGE_A_REFERENCE_EDIT = PASS
-LIVE_STAGE_A_OUTPUT_READBACK = PASS
-LIVE_STAGE_A_TO_STAGE_B_PASS_THROUGH = PASS
-LIVE_STAGE_B_REFERENCE_EDIT = PASS
-LIVE_STAGE_B_OUTPUT_READBACK = PASS
-```
-
-成功后：
-
-```text
-RUNTIME_CAPABILITIES_VERIFIED = PASS
-RUNTIME_PROFILE_VERIFIED = TRUE
-RUNTIME_PROFILE_SCOPE = FULL_A_TO_B
-FIRST_LIVE_VERIFICATION_REQUIRED = FALSE
-```
-
-若第一笔任务只有 A，只允许建立 `STAGE_A` scope evidence；不得声称完整 B 链路 verified。
-
-## L. Profile Invalidation / Recovery
-
-以下任一发生：fingerprint 变化、Credential 失效、视觉读取失败、reference edit 失败、Stage A→B pass-through 失败、Stage B output readback 失败。
+## 3. Current B Job Gate
 
 必须：
 
 ```text
-RUNTIME_PROFILE_VERIFIED = FALSE
-RUNTIME_CAPABILITIES_VERIFIED = PENDING / BLOCKED
-RUNTIME_STATE = SETUP_GATE
-PRODUCTION_GATE = BLOCKED
+CURRENT_JOB_FACTS = CREATED
+INTENT = B
+CURRENT_STAGE_A_QC = PASS
+STAGE_B_REFERENCE = CURRENT_JOB_STAGE_A_PASS_IMAGE
+B_JOB_CORE = LOADED
+CURRENT_CATEGORY_ONLY = TRUE
+SELECTED_VISUAL_SYSTEM = RESOLVED
+TYPOGRAPHY_PERSONALITY = RESOLVED
+FULL_TEXT_SYSTEM_PLAN = CREATED
+COPY_ALLOWLIST = CREATED
+COPY_BLOCKLIST = CREATED
+EXECUTION_CONTRACT = COMPACT_AND_COMPLETE
 ```
 
-版本变化、上下文压缩或 P0 规则无法准确复述时也重新 BOOTSTRAP / Pre-flight。
+## 4. Copy Gate
+
+若用户未提供完整海报文案：
+
+- 产品名可作为 headline；
+- subtitle/slogan 可生成非事实型传播文案；
+- 用户说“按默认文案来”仍只授权软文案；
+- 未确认电话、地址、价格、认证、奖项、工艺、产地、食材等不得编造；
+- 信息不足时降低密度，不靠编造填满。
+
+## 5. Prompt Sanity Gate
+
+Stage B IMAGE_MODEL Prompt 必须：
+
+```text
+REFERENCE = CURRENT_JOB_STAGE_A_PASS_IMAGE
+PRODUCT_PRIORITY = 1
+HEADLINE_PRIORITY = 2
+CURRENT_JOB_ONLY = TRUE
+PREVIOUS_JOB_SKIN = NONE
+ALL_12_CATEGORY_SKINS = NONE
+FULL_REPO_DUMP = FALSE
+TEST_CONTENT = NONE
+```
+
+当前 Prompt 只保留当前品类、当前文案、当前空间系统和当前产品锁定。
+
+## 6. Post-Generation Gate
+
+至少检查：
+
+```text
+Food Fidelity >=95
+Vessel Fidelity >=98
+Typography Accuracy =100
+Category Visual Language >=90
+Full Text-System Spatiality = PASS
+Product Dominance = PASS
+Category Skin Contamination = FALSE
+Upper-Bound Readiness >=90
+Legacy Entity Contamination = 0
+```
+
+失败 → 只加载对应 QC/Retry reference → 定向重试。
+
+## 7. READY / First Live Verification
+
+Minimal Core + declared capability PASS：
+
+```text
+RUNTIME_STATE = READY_WAITING_FOR_START
+```
+
+用户“启动”后进入 PRODUCTION。
+
+首次完整 A→B 尚未验证时，第一笔真实 B 业务兼任验证，不额外生成 smoke-test 海报。
+
+## 8. Recovery
+
+VISION / IMAGE reference-edit / Stage A dependency / Credential / A→B pass-through / output readback 失败 → 回 `SETUP_GATE`，只修具体缺失项。
