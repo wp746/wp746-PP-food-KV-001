@@ -58,14 +58,16 @@ When the user says `B / 执行B`:
 
 1. complete current Stage A first;
 2. inspect current copy;
-3. build `COPY_ALLOWLIST / COPY_BLOCKLIST`;
-4. re-route the current food category;
-5. activate only the current visual system + current typography rules;
-6. build a compact current-job contract;
-7. generate Stage B;
-8. QC and targeted retry.
+3. if headline / subtitle / at least one auxiliary field is missing, ask only for the minimum missing copy;
+4. only after explicit default-copy authorization may the agent generate missing soft campaign copy;
+5. build `COPY_ALLOWLIST / COPY_BLOCKLIST`;
+6. re-route the current food category;
+7. activate only the current visual system + current typography rules;
+8. build a compact current-job contract;
+9. generate Stage B;
+10. QC and targeted retry.
 
-If copy is sparse, the product name may be the headline and non-factual campaign/subtitle copy may be generated. “按默认文案来” does **not** authorize invented phone numbers, addresses, prices, certifications, awards, origin, process, history or unverified ingredients.
+“按默认文案来 / 文案你来安排” may authorize non-factual headline/subtitle/slogan/sensory copy, but never authorizes invented phone numbers, addresses, prices, certifications, awards, origin, process, history or unverified ingredients.
 
 ## Product Hero + Category-Native Rule
 
