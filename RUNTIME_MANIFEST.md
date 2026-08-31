@@ -58,18 +58,31 @@ LEGACY_CATEGORY_SKIN_IMPORT = OFF
 
 历史案例只能迁移方法，不能迁移事实或视觉皮肤。
 
-## P3. Copy Truth / Information Policy
+## P3. Copy Truth / Information Gate
 
 硬事实只能来自用户明确提供或当前图像能够可靠确认的内容。
 
-严禁自行编造：电话、地址、价格、营业时间、活动、认证、奖项、店史、原产地、官方背书、未确认食材、未确认口味、未确认制作工艺等。
+正式执行 B 前默认检查：
 
-规则：
-- 用户给产品名但没给主标题 → 产品名可直接作为 headline；
-- 用户没给 subtitle → 可生成不冒充硬事实的传播型副标题；
-- 用户给“新品/纯手制/可预定”等事实时才允许正式写入；
-- 信息不足时降低信息密度，不用编造内容填满版面；
-- 用户说“剩下的你自己安排”只授权视觉导演和安全传播文案，不授权发明商业事实。
+```text
+HEADLINE = required
+SUBTITLE = required
+AUXILIARY_INFORMATION_COUNT >= 1
+```
+
+如果缺失：**只询问最少缺失项**，不要未经授权自动把整套文案补完。
+
+只有用户明确表达“按默认文案来 / 文案你来安排 / 剩下文字你来写”等，才允许：
+
+```text
+DEFAULT_COPY_AUTHORIZED = TRUE
+```
+
+此时可用产品名作为 headline，并生成非事实型 subtitle / slogan / 感官型卖点。
+
+即使 `DEFAULT_COPY_AUTHORIZED = TRUE`，仍严禁自行编造：电话、地址、价格、营业时间、活动、认证、奖项、店史、原产地、官方背书、未确认食材、未确认口味、未确认制作工艺、医疗/健康功效等。
+
+信息不足时降低密度，不靠编造填满版面。
 
 每个 B 合同必须有：
 
@@ -240,7 +253,37 @@ Verified profile 保存在宿主私有持久状态；fingerprint 不变时跨会
 
 配置 identity 变化或任何真实链路失败 → profile 失效。
 
-## P13. Fail Closed
+## P13. Runtime Context Discipline｜防过载/防串台
+
+正常生产采用 Minimal Core，禁止把“为了安全”变成“全部都读”。
+
+```text
+FULL_REPO_DUMP = FORBIDDEN
+TESTS_IN_NORMAL_RUNTIME = FORBIDDEN
+ALL_12_CATEGORY_SKINS_ACTIVE = FORBIDDEN
+PREVIOUS_JOB_SKIN_IMPORT = OFF
+```
+
+当前 B 任务只允许激活：
+
+```text
+1 primary selected_visual_system
++ optional 1 weak auxiliary system
++ current typography rules
++ current layout/information rules if needed
+```
+
+IMAGE_MODEL 只接收：
+
+```text
+CURRENT_JOB_STAGE_A_PASS_IMAGE
++ compact current B Execution Contract
++ compact current B Prompt
+```
+
+不得把 SOP、tests、全部 references、历史案例和旧任务摘要直接拼进 IMAGE_MODEL Prompt。
+
+## P14. Fail Closed
 
 以下任一无法确认：
 
@@ -248,7 +291,7 @@ Verified profile 保存在宿主私有持久状态；fingerprint 不变时跨会
 PRODUCTION_GATE = BLOCKED
 ```
 
-- Mandatory Read；
+- Runtime Minimal Core；
 - Pre-flight；
 - `RUNTIME_CAPABILITIES_DECLARED != PASS`；
 - Stage A dependency；
@@ -261,11 +304,11 @@ PRODUCTION_GATE = BLOCKED
 
 `RUNTIME_CAPABILITIES_VERIFIED = PENDING` 本身不代表配置缺失；它表示第一笔真实业务必须在最终交付前完成 live verification。
 
-## P14. Repository Security Boundary
+## P15. Repository Security Boundary
 
 仓库不保存具体供应商名、私有聚合平台名、实际 API Base URL、API Key、Token、私有模型凭据或 Runtime Profile 的真实值。只保留通用能力要求；真实值由宿主 Secret / Environment / Connection / 私有持久状态提供。
 
-## P15. Runtime State
+## P16. Runtime State
 
 ```text
 SETUP_GATE
