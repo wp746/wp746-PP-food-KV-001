@@ -1,91 +1,106 @@
 # Information Gate
 
-本文件只解决“哪些信息可以进入正式 KV、缺信息时怎么办”。不得通过补写硬事实来提高信息密度。
+本文件只解决：**执行B需要哪些上版文字、缺信息时怎么办、什么时候允许系统代写默认文案。**
 
-## Entry Logic
+## Default B Entry Gate
 
-B 已被显式触发或由商业信息自动触发后，不要求用户必须懂“主标题/副标题/辅助字段”的内部结构。
-
-最低可用条件：
+用户说 `B / 执行B` 后，正式进入 Stage B 设计前默认检查：
 
 ```text
-product_name OR explicit_headline OR user_identified_product != empty
+HEADLINE = required
+SUBTITLE = required
+AUXILIARY_INFORMATION_COUNT >= 1
 ```
 
-如果用户明确说 B 但连产品身份/主标题都无法可靠确认，只询问**一个最少必要项**：产品名或希望使用的主标题。
+辅助信息可以是：品牌/店名、Slogan、卖点、核心食材、价格、净含量、地址、电话、活动信息或其他用户明确提供的真实商业信息。
 
-## Headline
+## Missing Information Behavior
 
-优先级：
+如果用户没有给够：
+
+> **先提醒用户补 KV 上要出现的文字，只问最少缺失项。不要未经授权自动把所有缺失文案补完。**
+
+示例：
+- 有产品名 + 店名，但无主标题/副标题 → 提醒补主标题和副标题；
+- 有主标题，无副标题 → 只问副标题；
+- 主副标题都有但无辅助信息 → 只问 1 项辅助信息。
+
+不要重复询问已经提供的信息。
+
+## Default Copy Authorization
+
+只有用户明确表达以下含义时，才进入 `DEFAULT_COPY_AUTHORIZED = TRUE`：
 
 ```text
-1. 用户明确主标题
-2. 用户明确产品/菜名 → 直接作为 headline
-3. 无法可靠确认 → 询问最少必要项
+按默认文案来
+文案你来安排
+剩下的文字你来写
+按你判断补文案
 ```
 
-不得自行给未知产品起一个具体菜名。
+此时允许：
+- 产品名作为 headline；
+- 生成非事实型 subtitle；
+- 生成感官/传播型 slogan；
+- 生成不冒充硬事实的安全卖点。
 
-## Subtitle / Slogan
-
-如果用户已给副标题，必须 100% 准确使用。
-
-如果未给，可以生成**非硬事实型传播文案**，但必须满足：
-- 不新增食材；
-- 不新增具体口味；
-- 不新增制作工艺；
-- 不新增产地、认证、奖项、店史；
-- 不把推测写成用户事实。
-
-用户说“新品”“纯手制”“可预定”等，只有当前消息明确提供时才能作为正式事实文案。
-
-## Auxiliary Information
-
-用户提供多少真实信息，就用多少；信息少时降低版面信息密度。
-
-可用真实字段包括：
+例如：
 
 ```text
-store_name
-brand_name
-address
-phone
-reservation_phone
-opening_hours
-price
-core_ingredients
-selling_point
-campaign_info
-other_user_provided_business_info
+现烤出炉
+麦香浓郁
+清甜多汁
+冰爽解暑
+茶香回甘
+果香满溢
 ```
 
-**不再为了满足固定 N 值而编造辅助字段。**
+## Hard Facts Never Auto-Generated
+
+即使 `DEFAULT_COPY_AUTHORIZED = TRUE`，仍禁止编造：
+
+```text
+电话
+地址
+价格
+营业时间
+产地
+认证
+奖项
+品牌历史
+官方背书
+未确认食材
+未确认口味
+未确认制作工艺
+医疗/健康功效
+```
+
+用户明确提供后才进入正式文案。
 
 ## COPY_ALLOWLIST
 
-每个 B 任务必须建立当前任务 `COPY_ALLOWLIST`：
+每个 B 任务建立当前任务 `COPY_ALLOWLIST`：
 - 用户明确提供的产品名/品牌/店铺/地址/电话/价格/活动/卖点；
-- 当前图像能够可靠确认、且不会冒充商业事实的可见产品事实；
-- 用户明确授权的标题/副标题。
-
-不确定的信息不要进入 Allowlist。
+- 用户明确提供的 headline/subtitle/slogan；
+- 用户授权默认文案后生成的安全软文案。
 
 ## COPY_BLOCKLIST
 
 默认包含：
-- 上一任务所有品牌、产品名、食材、口味、地址、电话、Slogan；
-- 未确认的食材/口味/制作工艺；
-- 未确认的价格、地址、电话、营业时间、认证、奖项、原产地、店史和官方背书。
+- 上一任务全部品牌、产品、地址、电话、Slogan、价格和硬事实；
+- 当前用户未确认的商业事实；
+- 当前图像无法可靠确认的食材/口味/工艺；
+- 所有可能误导消费者的虚构事实。
 
-## Insufficient Information Strategy
+## Information Density
 
-优先顺序：
+信息少时：
 
 ```text
 reduce information density
-> use safe non-factual campaign copy
-> ask one minimum necessary fact
+> ask minimum missing copy
+> default copy only after authorization
 > NEVER fabricate hard facts
 ```
 
-“剩下的你自己安排”只授权视觉设计和安全传播文案，不授权编造产品/商业事实。
+视觉可以主动设计；商业事实不能主动发明。
