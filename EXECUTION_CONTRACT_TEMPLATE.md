@@ -9,6 +9,7 @@ JOB_MODE = B
 REFERENCE = CURRENT_JOB_STAGE_A_PASS_IMAGE
 OUTPUT = 9:16
 KV_MODE = TRUE_UPPER_BOUND | USER_REQUESTED_LOWER_MODE
+DEFAULT_COPY_AUTHORIZED = TRUE | FALSE
 
 1) PRODUCT_LOCK
 - product identity:
@@ -83,11 +84,25 @@ F. Hard Negatives
 
 ## Copy Rules
 
-- 用户给产品名但没给 headline → 产品名可直接作为 headline。
-- 用户没给 subtitle → 可生成非事实型传播副标题。
-- 用户说“按默认文案来” → 只授权感官/传播软文案。
-- 未确认电话、地址、价格、认证、奖项、历史、工艺、产地、食材等硬事实不得生成。
-- 信息少 → 降低信息密度。
+默认先执行 `references/information-gate.md`：
+
+```text
+HEADLINE = required
+SUBTITLE = required
+AUXILIARY_INFORMATION_COUNT >=1
+```
+
+缺失时只询问最少缺失项。
+
+只有用户明确说“按默认文案来 / 文案你来安排 / 剩下文字你来写”等，才设置：
+
+```text
+DEFAULT_COPY_AUTHORIZED = TRUE
+```
+
+此时允许产品名作为 headline，并生成非事实型 subtitle / slogan / 感官卖点。
+
+即使授权默认文案，仍不得生成未确认电话、地址、价格、认证、奖项、历史、工艺、产地、食材等硬事实。
 
 ## Anti-Drift Rule
 
