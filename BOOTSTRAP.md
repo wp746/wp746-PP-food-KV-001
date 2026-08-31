@@ -1,21 +1,14 @@
 # PP-food-KV-001 Bootstrap Protocol
 
-本文件用于跨智能体冷启动与恢复，防止只读 `SKILL.md`、漏读 Stage A Bridge / Category / Typography / Upper-Bound / QC 后直接出 KV。
+目标：跨智能体稳定复现 B，同时避免“为了防漏读而全仓库加载”造成品类串台、文字规则冲突和 Prompt 过载。
 
 ## 1. Bootstrap Triggers
 
-以下任一情况必须重新执行：
-- 首次 clone / 安装 / 加载；
-- 新智能体或新会话；
-- `VERSION` 变化；
-- 上下文被压缩、重置或恢复；
-- 无法准确复述当前 P0 规则；
-- Stage A→Stage B 图片传递状态未知；
-- 模型/凭据/视觉能力状态未知。
+首次安装/新会话、VERSION 变化、上下文压缩/恢复、A→B 能力未知、无法准确复述 P0 时重新执行。
 
-## 2. Mandatory Read Order
+## 2. Runtime Minimal Core｜正常生产必读
 
-任何生产动作之前按顺序读取：
+按顺序读取：
 
 ```text
 1. VERSION
@@ -25,113 +18,105 @@
 5. HANDOFF.md
 6. REQUIRED_READ_SET.md
 7. PRE_FLIGHT_CHECKLIST.md
-8. REQUIRED_READ_SET.md 的 COLD_START_ALWAYS_LOAD references
-9. tests/runtime-handoff-tests.md
-10. tests/test-cases.md
-11. EXECUTION_CONTRACT_TEMPLATE.md
+8. EXECUTION_CONTRACT_TEMPLATE.md
 ```
 
-`SOP-B.md` 是执行B的 Canonical Operator SOP。它规定 B 的自然语言交互、信息门槛、Stage A Bridge、品类路由、Product Hero、Spatial Typography、True Upper-Bound、QC 与定向重试。
-
-禁止：
-- 自行跳过 `SOP-B.md`；
-- 自行跳过 COLD_START_ALWAYS_LOAD；
-- 用摘要代替正文；
-- Mandatory Read 未完成就先生成一版；
-- 用旧会话记忆替代当前仓库；
-- 因上一张效果好而继承上一品类具体视觉皮肤。
-
-## 3. Rule Authority
+正常生产冷启动不要读取：
 
 ```text
-P0 runtime invariants: RUNTIME_MANIFEST.md
-Stage role / entrypoint: SKILL.md
-B operator workflow: SOP-B.md
-Runtime configuration: HANDOFF.md
-Detailed methods: references/
-Acceptance / regression: tests/
-Current-job compilation: EXECUTION_CONTRACT_TEMPLATE.md
+tests/*
+全部 references/*
+全部 12 品类视觉系统正文
+历史案例 / 旧对话总结
 ```
 
-Stage A 的 Canonical Operator SOP 来自依赖仓库：
+`tests/*` 只用于 Skill 开发、升级、审计和回归验证。
+
+## 3. Authority
 
 ```text
-PP-food-001/SOP-A.md
+P0 invariants              → RUNTIME_MANIFEST.md
+B 操作流程                  → SOP-B.md
+runtime / Stage A 能力      → HANDOFF.md
+当前任务加载策略            → REQUIRED_READ_SET.md
+生产门禁                    → PRE_FLIGHT_CHECKLIST.md
+当前 B 合同                 → EXECUTION_CONTRACT_TEMPLATE.md
+细节方法                    → references/（按当前任务）
+开发/回归                   → tests/（非生产）
 ```
 
-发现真实冲突：
+Stage A 的 Canonical SOP 来自 `PP-food-001/SOP-A.md`。
 
-```text
-PRODUCTION_GATE = BLOCKED
-```
+真实冲突未解决：`PRODUCTION_GATE = BLOCKED`。
 
-指出冲突，不自行挑一个版本继续。
+## 4. Bootstrap Proof｜只证明关键不变量
 
-## 4. Bootstrap Proof
-
-Mandatory Read 后必须准确确认：
+必须确认：
 
 ```text
 REPO_VERSION = <VERSION>
 DEFAULT_ASPECT_RATIO = 9:16
-DEFAULT_KV_MODE = TRUE_UPPER_BOUND
-DEFAULT_INTENT_WITHOUT_BUSINESS_INFO = A
-EXPLICIT_A_OVERRIDES_AUTO_B = TRUE
-B_REQUIRES_STAGE_A_PASS = TRUE
+EXPLICIT_A = STAGE_A_ONLY
+B_REQUIRES_CURRENT_STAGE_A_PASS = TRUE
 STAGE_B_REFERENCE = CURRENT_JOB_STAGE_A_PASS_IMAGE
 PRODUCT_PRIORITY = 1
 HEADLINE_PRIORITY = 2
 TYPOGRAPHY_ACCURACY = 100%
-CATEGORY_SKIN_CONTAMINATION_ALLOWED = FALSE
-LEGACY_ENTITY_CONTAMINATION_ALLOWED = FALSE
+PREVIOUS_SKIN_IMPORT = OFF
 TRUE_UPPER_BOUND_CAN_REDESIGN_PRODUCT = FALSE
 ```
 
-还必须能解释：
-- `执行B` 为什么必须先真实完成当前任务 Stage A；
-- B 信息不足时为什么只追问最少缺失项；
-- 用户说“按默认文案来”时哪些软文案可以生成、哪些硬事实禁止编造；
-- 只迁移方法，不迁移上一品类皮肤；
-- 主标题、副标题、Slogan、辅助信息为什么必须形成完整空间文字系统；
-- 标题可以强，但为什么 Product Hero 必须更强；
-- 视觉上限与 Food Fidelity 冲突时怎么处理。
+并能解释：
+- B 为什么必须先真实完成当前任务 A；
+- 为什么每个新任务重新 Category Route；
+- “按默认文案来”只授权软文案，不授权硬事实；
+- 标题可以强，但产品必须更强。
 
-任一答不准 → 重读对应文件。
+## 5. Context Budget｜防串台硬规则
 
-## 5. Runtime Gate
-
-Bootstrap Proof 后执行 `PRE_FLIGHT_CHECKLIST.md`。
-
-只有：
+正常生产：
 
 ```text
-BOOTSTRAP_READ = PASS
-RUNTIME_CAPABILITIES = PASS
-STAGE_A_DEPENDENCY = PASS
-PRODUCTION_GATE = PASS
+FULL_REPO_DUMP = FORBIDDEN
+TESTS_IN_RUNTIME_CONTEXT = FORBIDDEN
+ALL_12_CATEGORY_SKINS_ACTIVE = FORBIDDEN
+PREVIOUS_JOB_SKIN_IMPORT = OFF
 ```
 
-才允许：
+当前任务只激活：
 
 ```text
-READY
-RUNTIME_STATE = READY_WAITING_FOR_START
+1 selected_visual_system
++ optional 1 weak auxiliary system
++ current typography rules
++ current information/layout rules if needed
 ```
 
-等待用户“启动”后进入 PRODUCTION。
+IMAGE_MODEL 只接收：当前 Stage A PASS 图 + 当前 B 短合同 + 当前 B 短 Prompt。
 
-## 6. Production Refresh
+## 6. Runtime Gate
 
-每个新 B 任务必须：
+完成 Bootstrap Proof 后运行 `PRE_FLIGHT_CHECKLIST.md`。
 
-1. 刷新 `RUNTIME_MANIFEST.md`；
-2. 刷新 `SOP-B.md`；
-3. 新建 `CURRENT_JOB_FACTS`；
-4. 按 `PP-food-001/SOP-A.md` 真实完成 Stage A 并取得当前任务 Stage A PASS 图；
-5. 初步 Category Route；
-6. 读取 `REQUIRED_READ_SET.md` 的 `B_JOB_ALWAYS_LOAD`；
-7. 加载当前任务需要的 `CONDITIONAL_LOAD`；
-8. 编译新的 B `EXECUTION_CONTRACT`；
-9. Contract / Stage A reference / Copy Lists 未完成不得调用 Stage B IMAGE_MODEL。
+静态能力完整可进入 `READY_WAITING_FOR_START`。若完整 A→B 尚无真实证据，标注 `VERIFIED = PENDING`，第一笔真实 B 业务兼任验证。
 
-长对话后无法证明 Cold-Start Core 或 `SOP-B.md` 仍在活跃上下文 → 重新 Bootstrap。
+用户说“启动”后进入 PRODUCTION。
+
+## 7. Production Refresh｜每个 B 新任务
+
+```text
+new CURRENT_JOB_FACTS
+→ current PP-food-001 Stage A
+→ current Stage A QC PASS
+→ refresh B P0
+→ current Category Route
+→ load B_JOB_CORE
+→ load only current conditional refs
+→ COPY_ALLOWLIST / COPY_BLOCKLIST
+→ compact B Execution Contract
+→ Stage B IMAGE_MODEL
+→ QC
+→ targeted retry
+```
+
+不要每张图完整 Bootstrap；只有版本/能力/上下文状态变化时才重新冷启动。
