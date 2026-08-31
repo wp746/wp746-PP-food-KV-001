@@ -1,8 +1,10 @@
 # PP-food-KV-001 Required Read Set
 
-目标：**冷启动只加载不会偏向某个食品品类的核心规则；真正拿到当前图后，再强制加载当前品类/字体/空间规则。**
+目标：**每个 B 任务只激活当前品类、当前字体和当前信息结构。禁止把 12 品类皮肤同时放进运行上下文。**
 
-## COLD_START_ALWAYS_LOAD｜冷启动核心 reference 必读
+## B_JOB_CORE｜每个 B 任务必读
+
+拿到当前任务 Stage A PASS 图并初步路由后，只固定加载：
 
 ```text
 references/food-fidelity-bridge.md
@@ -11,80 +13,41 @@ references/category-router.md
 references/category-style-firewall.md
 references/product-hero-priority.md
 references/upper-bound-standard.md
-references/kv-qc.md
-references/retry-policy.md
 ```
 
-两份 tests 由 `BOOTSTRAP.md` 单独读取，不在这里重复列出。
+这 6 个文件只负责：A→B 桥、文案事实边界、当前品类路由、防串台、产品优先级和上限边界。
 
-不得用摘要或“已经知道”代替正文。
+## CURRENT_CATEGORY_LOAD｜只加载当前品类条目
 
-## COLD-START READ-PROOF
-
-必须能回答：
-
-1. `food-fidelity-bridge.md`：为什么 Stage B 只能使用当前任务 Stage A PASS 图？
-2. `information-gate.md`：硬事实哪些不能编造？产品名如何充当 headline？信息不足时如何处理？
-3. `category-router.md`：置信度如何影响 specific / family / conservative route？
-4. `category-style-firewall.md`：什么叫“只迁移方法，不迁移上一品类皮肤”？
-5. `product-hero-priority.md`：完整视觉优先级是什么？
-6. `upper-bound-standard.md`：True Upper-Bound 的定义、Product Lock 和 >=90 门槛是什么？
-7. `kv-qc.md`：Food / Typography / Design 的硬门槛是什么？
-8. `retry-policy.md`：为什么必须定向重试且不能无限重抽？
-9. Bootstrap 单独读取的两份 tests：B 必经 A、9:16、Execution Contract、Fail Closed、Previous-Skin/Entity Contamination 的回归要求是什么？
-
-答不准任何一项 → 重读对应文件。
-
-## B_JOB_ALWAYS_LOAD｜每个 B 任务必读
-
-拿到当前任务 Stage A PASS 图并完成初步 Category Route 后，每个 B 任务必须读取：
+从以下文件提取**当前 selected_visual_system 对应条目**，不要把完整 12 品类文本全部激活：
 
 ```text
-references/category-qc.md
+references/category-visual-systems.md
 references/typography-personality-map.md
 references/typography-system.md
 references/spatial-typography-engine.md
-references/category-visual-systems.md
 ```
 
-规则：
-- `category-visual-systems.md` 只把当前 `selected_visual_system` 和最多一个弱辅助系统带入 Contract；
-- Typography 文件只提取当前品类需要的字体人格、主副标题空间介质和层级规则；
-- 不把其他品类的具体视觉皮肤注入当前 Stage B Prompt。
-
-### B-Job Proof
-
-调用 Stage B IMAGE_MODEL 前必须确认：
+只允许：
 
 ```text
-SELECTED_VISUAL_SYSTEM = RESOLVED
-CATEGORY_QC_RULE = LOADED
-TYPOGRAPHY_PERSONALITY = RESOLVED
-HEADLINE_SPATIAL_MEDIUM = RESOLVED
-SUBTITLE_SPATIAL_MEDIUM = RESOLVED
-FULL_TEXT_SYSTEM_PLAN = CREATED
+1 primary visual system
++ optional 1 weak auxiliary system
 ```
 
-## CONDITIONAL_LOAD｜按当前任务加载
+其他品类皮肤在当前任务中视为 INACTIVE。
+
+## CONDITIONAL_LOAD｜有需要才读
 
 ### Brand Positioning
-
-```text
-references/brand-positioning-map.md
-```
-
-Category 仍占主导，Brand Positioning 不得把食品跨到另一品类皮肤。
+`references/brand-positioning-map.md`
 
 ### Layout / Information Density
+`references/layout-bias-map.md`
+`references/information-density.md`
 
-```text
-references/layout-bias-map.md
-references/information-density.md
-```
-
-### Creative / Prompt / Perspective
-
-需要 One Big Idea、Prompt 编译、空间导演或遮挡时读取：
+### One Big Idea / Prompt / Perspective / Occlusion
+只在当前 KV 确实需要时，从以下中选择必要文件：
 
 ```text
 references/creative-director.md
@@ -94,32 +57,57 @@ references/occlusion-engine.md
 ```
 
 ### QR
+只有真实 QR / 真实扫码目标时：
+`references/qr-system.md`
 
-只有用户提供真实 QR 或真实目标时读取：
-
-```text
-references/qr-system.md
-```
-
-### Domain / Dish Semantics
-
-品类仍有歧义时读取：
+### Category Ambiguity
+仅当品类仍不确定时：
 
 ```text
 references/domain-style-firewall.md
 references/dish-semantic-router.md
 ```
 
-## Production Refresh
-
-每个 B 新任务至少刷新：
+## POST_GENERATION_CORE｜生成后按需
 
 ```text
-RUNTIME_MANIFEST.md
-food-fidelity-bridge.md
-B_JOB_ALWAYS_LOAD
-当前任务需要的 CONDITIONAL_LOAD
-EXECUTION_CONTRACT_TEMPLATE.md
+references/category-qc.md
+references/kv-qc.md
+references/retry-policy.md
 ```
 
-上下文压缩后若无法证明 Cold-Start Core 仍在活跃上下文，重新执行 BOOTSTRAP。
+QC/Retry 文件不要提前作为视觉皮肤内容灌入 IMAGE_MODEL Prompt。
+
+## Anti-Overload Rules
+
+```text
+LOAD_ALL_12_CATEGORY_SYSTEMS = FORBIDDEN
+LOAD_ALL_TYPOGRAPHY_EXAMPLES = FORBIDDEN
+LOAD_ALL_CONDITIONAL_REFERENCES = FORBIDDEN
+TESTS_DURING_NORMAL_PRODUCTION = FORBIDDEN
+PREVIOUS_JOB_SKIN_IMPORT = OFF
+```
+
+如果一个 reference 很长，只抽取当前类别/当前规则条目。
+
+## B-Job Proof
+
+调用 Stage B IMAGE_MODEL 前只需确认：
+
+```text
+CURRENT_STAGE_A_PASS_IMAGE = READY
+SELECTED_VISUAL_SYSTEM = RESOLVED
+TYPOGRAPHY_PERSONALITY = RESOLVED
+HEADLINE_SPATIAL_MEDIUM = RESOLVED
+SUBTITLE_SPATIAL_MEDIUM = RESOLVED
+FULL_TEXT_SYSTEM_PLAN = CREATED
+COPY_ALLOWLIST = CREATED
+COPY_BLOCKLIST = CREATED
+EXECUTION_CONTRACT = COMPACT_AND_CURRENT_JOB_ONLY
+```
+
+缺项 → B BLOCKED。
+
+## Production Refresh
+
+每个新 B 任务重新路由、重新选择当前 category/typography refs。上一任务加载过的品类文件不会自动延续为当前视觉皮肤。
