@@ -1,138 +1,76 @@
 # PP-food-KV-001 Runtime / Handoff Regression Tests
 
-这些测试定义 Stage B 跨智能体冷启动的硬行为。
+这些测试用于 **Skill 开发、升级和回归审计**，不是正常生产时的 Mandatory Runtime Read。
 
-## R01｜冷启动必须从 BOOTSTRAP 开始
-PASS：优先读取 `BOOTSTRAP.md`，按 Mandatory Read Order 完成加载。
-FAIL：只读 `SKILL.md` 摘要或只读少数 references 后直接出 KV。
+## R01｜冷启动从 BOOTSTRAP 开始
+PASS：先读 `BOOTSTRAP.md`。
+FAIL：只读 `SKILL.md` 摘要就出 KV。
 
-## R02｜Cold-Start Core 不得选择性跳过
-PASS：`REQUIRED_READ_SET.md` 中 `COLD_START_ALWAYS_LOAD` 全部读取，并完成读取证明。
-FAIL：自行跳过 Stage A Bridge、Category Firewall、Product Hero、Upper-Bound、QC 或 Retry 核心规则。
-
-## R03｜读取证明必须复述硬规则
-Pre-flight 必须准确返回：当前 VERSION、默认 9:16、A/B 路由、B 必经 A、Stage B reference = 当前任务 Stage A PASS 图、Product > Headline、TRUE_UPPER_BOUND、Previous-Skin Contamination、Full Text-System Spatiality、Typography Accuracy = 100%。
-
-## R04｜Mandatory Read 未完成则 Fail Closed
-任一必读文件不可访问、未验证或只被摘要代替 → `PRODUCTION_GATE = BLOCKED`。
-
-## R05｜Declared Capability 不等于 Verified Capability
-宿主工具描述、schema、配置存在只能证明：
+## R02｜Runtime Minimal Core
+正常生产冷启动只加载：
 
 ```text
-RUNTIME_CAPABILITIES_DECLARED = PASS
+VERSION
+RUNTIME_MANIFEST.md
+SKILL.md
+SOP-B.md
+HANDOFF.md
+REQUIRED_READ_SET.md
+PRE_FLIGHT_CHECKLIST.md
+EXECUTION_CONTRACT_TEMPLATE.md
 ```
 
-若当前配置没有真实 A→B 端到端证据：
+references 按当前任务条件加载；tests 不进入生产上下文。
 
-```text
-RUNTIME_CAPABILITIES_VERIFIED = PENDING
-FIRST_LIVE_VERIFICATION_REQUIRED = TRUE
-```
+## R03｜Tests = Development Only
+仅在版本升级、Skill 审计、回归验证时读取 `tests/*`。
 
-FAIL：没有真实链路证据却写 `VERIFIED = PASS` 或声称 Stage A→B 已完成 smoke test。
+## R04｜B 必经 A
+PASS：当前原图 → PP-food-001 Stage A → 当前 Stage A QC PASS → 当前 Stage A PASS 图 → Stage B。
+FAIL：原始随手拍一步激进 KV；回退上一任务图。
 
-## R06｜Declared 完整时可 READY，但必须标明验证级别
-如果 Mandatory Read、Credential presence、Stage A dependency、reference-edit 路由和图片 pass-through 均可静态确认，可进入 READY。
+## R05｜Current Job Isolation
+上一任务的产品、品牌、地址、文案、品类皮肤、字体、背景、卖点模块默认全部失效。
 
-若无匹配的 verified Runtime Profile，必须同时输出：
+## R06｜每个新任务重新路由
+PASS：重新计算 current category / visual system。
+FAIL：因为上一张效果好直接继承上一品类皮肤。
 
-```text
-RUNTIME_CAPABILITIES_DECLARED = PASS
-RUNTIME_CAPABILITIES_VERIFIED = PENDING
-FIRST_LIVE_VERIFICATION_REQUIRED = TRUE
-```
+## R07｜Product Hero Priority
+第一视觉主角必须是产品；Headline 第二。不得为了标题缩小、后退或遮挡产品。
 
-`PRODUCTION_GATE = PASS` 只表示“可开始真实生产验证”，不等于已经端到端验证。
+## R08｜Full Text-System Spatiality
+主标题、副标题、Slogan/卖点必须形成同一品类空间文字系统；不能只有主标题立体、其他像 PPT 平贴。
 
-## R07｜首次真实 B 任务兼任端到端验证
-当 profile 未验证时，用户启动后的第一笔真实 B 任务必须实际证明：
-- VISION_MODEL 能读当前原图；
-- Stage A IMAGE_MODEL 能接收当前原图 reference；
-- Stage A 输出能被视觉 QC；
-- 当前 Stage A PASS 图能真实传给 Stage B IMAGE_MODEL；
-- Stage B 输出能被视觉 QC。
+## R09｜Copy Truth
+每个 B 任务建立 `COPY_ALLOWLIST / COPY_BLOCKLIST`。未确认电话、地址、价格、认证、奖项、历史、工艺、食材等硬事实不得编造。
 
-成功并在最终交付前完成后，才可：
+## R10｜默认文案授权边界
+用户说“按默认文案来”只授权非事实型传播/感官软文案，不授权新增硬事实。
 
-```text
-RUNTIME_CAPABILITIES_VERIFIED = PASS
-RUNTIME_PROFILE_VERIFIED = TRUE
-FIRST_LIVE_VERIFICATION_REQUIRED = FALSE
-```
+## R11｜Category Style Firewall
+只迁移方法，不迁移上一品类视觉皮肤。
 
-禁止为此额外生成无业务价值的测试海报。
+## R12｜True Upper-Bound 不重做产品
+上限发生在背景、字体、空间、材质、透视、光影和 Campaign Finish，不发生在 Food DNA / 包装 DNA。
 
-## R08｜A 任务也可部分验证，但不能伪造 B 链路已验证
-如果首次真实任务只是 A，可验证视觉读取、reference edit、Stage A 输出回读；但在 Stage A→B pass-through 尚无真实证据时，不得声称完整 B 链路 verified。
+## R13｜禁止整仓库 Prompt Dump
+Agent 必须从当前合同编译短 Stage B Prompt；不得把 SOP、tests、全部 category references 原文塞给 IMAGE_MODEL。
 
-可记录 component-level evidence；完整双 Skill profile 只有实际 B 链路成功后才是 FULL VERIFIED。
+## R14｜Conditional Reference Budget
+只加载当前 `selected_visual_system`、当前 Typography 规则和必要的 0–2 个辅助 reference。不得一次加载全部 12 品类视觉皮肤。
 
-## R09｜Verified Runtime Profile 可跨会话复用
-profile 保存在宿主私有持久状态，禁止提交仓库。
+## R15｜Declared != Verified
+静态能力不等于真实 A→B 已验证。无真实证据时 `VERIFIED = PENDING`。
 
-当前非秘密配置 fingerprint 与 profile 匹配时：
+## R16｜首次真实 B 任务兼任验证
+不额外生成测试海报；真实任务验证 original vision read、Stage A edit/readback、A→B pass-through、Stage B edit/readback。
 
-```text
-RUNTIME_PROFILE_FINGERPRINT_MATCH = TRUE
-RUNTIME_CAPABILITIES_VERIFIED = PASS
-FIRST_LIVE_VERIFICATION_REQUIRED = FALSE
-```
+## R17｜Typography Accuracy
+用户提供的产品名、品牌、价格、地址、电话等只要错一字/数字即 FAIL。
 
-新会话不得重复要求 smoke test。
+## R18｜Targeted Retry Only
+按 Food Drift / Product Demotion / Typography / Category / Copy / Density / Big Idea 定向重试，不随机整张重抽。
 
-## R10｜Fingerprint 只使用非秘密身份
-可包含模型标识、连接槽/路由标识、reference-edit 路由模式、Stage A→B pass-through 版本、API origin 的不可逆摘要（如需要）。
-
-禁止包含 API Key、Token、完整私有 URL 或用户凭据。
-
-## R11｜配置变化使旧验证失效
-视觉模型、图片模型、reference edit 路由、Stage A→B 路由或连接身份变化 → fingerprint mismatch：
-
-```text
-RUNTIME_CAPABILITIES_VERIFIED = PENDING
-FIRST_LIVE_VERIFICATION_REQUIRED = TRUE
-```
-
-## R12｜真实生产失败立即使 profile 失效
-任何已验证 profile 遇到读图、reference edit、Credential、Stage A→B pass-through、Stage B output readback 失败：
-
-```text
-RUNTIME_PROFILE_VERIFIED = FALSE
-RUNTIME_STATE = SETUP_GATE
-PRODUCTION_GATE = BLOCKED
-```
-
-不得继续复用旧 PASS。
-
-## R13｜PP-food-001 依赖必须真实存在
-PASS：B 路径能够真正执行 Stage A。
-FAIL：声称“双 Skill”但没有 Stage A 或 Stage A 结果不能传入 Stage B。
-
-## R14｜不允许猜图
-宿主默认模型无视觉能力时，原图、Stage A 图和 Stage B 图均由 VISION_MODEL 读取/QC。
-
-## R15｜仓库不得保存私有运行配置
-FAIL：出现具体供应商名、私有聚合平台名、实际 API Base URL、API Key 或私有模型凭据。
-
-## R16｜READY 后等待“启动”
-配置与 Pre-flight 通过后输出 READY 状态和 capability evidence level，然后等待用户“启动”。
-
-## R17｜启动后自然语言生产
-进入 PRODUCTION 后用户只需上传图、说 A/B 或提供商业信息；不得要求用户理解内部 JSON、Visual System 或 Prompt。
-
-## R18｜每个 B 任务必须完成 B Job Reads + Execution Contract
-PASS：Stage A PASS 后读取 `B_JOB_ALWAYS_LOAD`，解析当前品类字体/空间系统，再建立当前任务 B Contract。
-FAIL：冷启动读完后长期不刷新当前品类规则，或直接套上一任务皮肤。
-
-## R19｜Stage A 输出必须传给 Stage B
-FAIL：Stage B 回退到原始随手拍或上一任务图片。
-
-## R20｜每个新任务必须重新路由品类
-FAIL：因为上一张效果好，直接继承上一品类字体、背景、材质、配色、道具或信息模块皮肤。
-
-## R21｜上下文压缩/恢复必须重新引导
-如果智能体无法证明当前 `RUNTIME_MANIFEST.md` 与 P0 规则仍在活跃上下文，应重新 BOOTSTRAP / Pre-flight。
-
-## R22｜连接失效回 SETUP_GATE
-Key、模型、参考图编辑、视觉读取或 Stage A→B 传递失效时，退出 PRODUCTION，只修复缺失项。
+## R19｜连接失效 Fail Closed
+VISION / IMAGE reference edit / Stage A dependency / A→B pass-through / Credential 失败 → 回 SETUP_GATE。
